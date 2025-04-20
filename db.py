@@ -1,10 +1,13 @@
+#This file only handles db interactions: connects the db on init; adds new users; checks if user exists etc
+
 import sqlite3
 
 DB_NAME = "users.db"
 
 def init_db():
+    #Connects to the db; creates table if doesn't exist
     conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
+    cursor = conn.cursor() #creates cursor to execute sql commands
 
     # Create the users table
     cursor.execute("""
@@ -17,14 +20,12 @@ def init_db():
     conn.commit()
     conn.close()
 
-#def create_user(username, password):
-        
-
+#Add new user to db
 def add_user(username, password):
     try:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-
+        #VALUES (?, ?) prevents SQL injection
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         conn.commit()
         print(f"User '{username}' added successfully.")
@@ -34,13 +35,9 @@ def add_user(username, password):
     finally:
         conn.close()
 
-#def create_admin_user():
-    ## Change this password or hash it later for better security
-    add_user("admin", "admin123")
-
-### Run this if you want to set up the DB with an admin user
 if __name__ == "__main__":
     init_db()
-    #create_admin_user()
-   
-    
+    # Uncomment the next line if you need to create admin user
+    # add_user("admin", "admin123")
+
+add_user("Pedro Castro", "12345")
