@@ -25,7 +25,7 @@ def add_user(username, password):
     try:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        #VALUES (?, ?) prevents SQL injection
+        #VALUES placeholder (?, ?) prevents SQL injection
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         conn.commit()
         print(f"User '{username}' added successfully.")
@@ -40,4 +40,3 @@ if __name__ == "__main__":
     # Uncomment the next line if you need to create admin user
     # add_user("admin", "admin123")
 
-add_user("Pedro Castro", "12345")
