@@ -1,5 +1,4 @@
 #This file only handles db interactions: connects the db on init; adds new users; checks if user exists etc
-
 import sqlite3
 import bcrypt
 
@@ -24,8 +23,6 @@ DB_NAME = "users.db"
 #     conn.commit()
 #     conn.close()
 
-
-
 class User:
     def __init__(self, username, password, is_admin=False):
         self.username=username
@@ -41,7 +38,7 @@ class User:
             cursor = conn.cursor()
             #VALUES placeholder (?, ?, ?, ?) prevents SQL injection
             cursor.execute(
-                "INSERT INTO USERS (username, password, isOnline, isAdmin) VALUES (?, ?, ?, ?)", 
+                "INSERT INTO users (username, password, isOnline, isAdmin) VALUES (?, ?, ?, ?)", 
                 (self.username, hashed, 0, int(self.is_admin))
                 )
             conn.commit()
@@ -49,15 +46,26 @@ class User:
         except sqlite3.IntegrityError:
             print(f"User '{self.username}' already exists, please choose a different user name.")
         finally:
-            conn.close()    
+            conn.close()
+    
+    @staticmethod 
+    def del_user(username):
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute(
+                "DELETE FROM users WHERE username=?", (username,)
+                )
+        conn.commit()
+        print(f"User '{username}' was deleted.")
+        
+        if cursor.rowcount == 0:
+            print(f"User '{username}' does not exist.")
+        else:
+            print(f"User '{username}' was deleted.")
         
 # #Example to create user
 # admin_user = User("Andy", "1234", is_admin=False)
 # admin_user.create_user()
 
-        
-# if __name__ == "__main__":
-#     init_db()
-#     # Uncomment the next line if you need to create admin user
-#     # add_user("admin", "admin123")
+
 

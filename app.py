@@ -3,7 +3,7 @@ from ttkbootstrap.constants import *
 
 app = tb.Window(themename="darkly")   # Choose a theme
 app.title("Login App")
-app.geometry("300x200")
+app.geometry("1200x900")
 
 #Username
 
