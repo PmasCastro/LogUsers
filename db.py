@@ -31,6 +31,10 @@ class User:
     
     #Add new user to db
     def create_user(self):
+        if " " in self.username:
+            print("Username cannot contain spaces")
+            return
+        
         #encrypt the password
         hashed = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
         try:
@@ -44,7 +48,7 @@ class User:
             conn.commit()
             print(f"User '{self.username}' added successfully.")
         except sqlite3.IntegrityError:
-            print(f"User '{self.username}' already exists, please choose a different user name.")
+            print(f"User '{self.username}' already exists, please choose a different username.")
         finally:
             conn.close()
     
