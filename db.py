@@ -4,25 +4,6 @@ import bcrypt
 
 DB_NAME = "users.db"
 
-# def init_db():
-#     #Connects to the db; creates table if doesn't exist
-#     conn = sqlite3.connect(DB_NAME)
-#     cursor = conn.cursor() #creates cursor to execute sql commands
-
-#     # Create the users table
-#     cursor.execute("""
-#         CREATE TABLE IF NOT EXISTS users (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             username TEXT UNIQUE NOT NULL,
-#             password TEXT NOT NULL,
-#             isOnline INT,
-#             isAdmin INT
-           
-#         );
-#     """)
-#     conn.commit()
-#     conn.close()
-
 class User:
     def __init__(self, username, password, is_admin=False):
         self.username=username
@@ -66,10 +47,37 @@ class User:
             print(f"User '{username}' does not exist.")
         else:
             print(f"User '{username}' was deleted.")
+        conn.close()
         
 # #Example to create user
 # admin_user = User("Andy", "1234", is_admin=False)
 # admin_user.create_user()
+
+
+def log_in(username):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE users SET isOnline=1 WHERE username =?", (username,)
+    )
+    conn.commit()
+    print(f"User '{username}' is logged in")
+    conn.close()
+
+def log_out(username):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE users SET isOnline=0 WHERE username =?", (username,)
+    )
+    conn.commit()
+    print(f"User '{username}' is logged out")
+    conn.close()
+
+
+log_out("Admin")
+    
+            
 
 
 
