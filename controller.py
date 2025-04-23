@@ -1,6 +1,8 @@
 from app import *
 from userdb import User
 
+
+#This function handles inputs from GUI, receives username and password and creates user on db
 def create_new_user():
     
     username = username_entry.get()
