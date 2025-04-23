@@ -2,41 +2,47 @@
 
 import sqlite3
 
-DB_NAME = "users.db"
+DB_NAME="users.db"
 
-def log_in(username):
-    conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
-    cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
-    result = cursor.fetchone()
+class Authenticator:
 
-    if result is None:
-        print(f"User '{username}' does not exist.")
-        conn.close()
-        return
-    if result[0] == 1:
-        print(f"User '{username}' is already logged in")
-        conn.close()
-        return
-    else:
-        cursor.execute(
-        "UPDATE users SET isOnline=1 WHERE username =?", (username,)
+    def __init__(self):
+        pass
+    
+    def login(self, username):
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
+        result = cursor.fetchone()
         
-    )
-    conn.commit()
-    print(f"User '{username}' is logged in")
-    conn.close()
+        if result is None:
+            print(f"User '{username}' does not exist.")
+            conn.close()
+            return
+        if result[0] == 1:
+            print(f"User '{username}' is already logged in")
+            conn.close()
+            return
+        else:
+            cursor.execute(
+                "UPDATE users SET isOnline=1 WHERE username =?", (username,)
+                )
+            conn.commit()
+            print(f"User '{username}' is logged in")
+            conn.close()
+    
+
+    def logout(self, username):
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE users SET isOnline=0 WHERE username =?", (username,)
+            )
+        conn.commit()
+        print(f"User '{username}' is logged out")
+        conn.close()
 
     
-def log_out(username):
-    conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
-    cursor.execute(
-        "UPDATE users SET isOnline=0 WHERE username =?", (username,)
-    )
-    conn.commit()
-    print(f"User '{username}' is logged out")
-    conn.close()
+user_login = Authenticator()
 
-
-log_out("Admin")
+user_login.login("Admin")
