@@ -1,5 +1,5 @@
 from userdb import User
-
+from tkinter import messagebox
 
 #This function handles inputs from GUI, receives username and password and creates user on db
 def create_new_user(username_entry, password_entry):
@@ -10,8 +10,10 @@ def create_new_user(username_entry, password_entry):
     if password and username:
         user = User(username, password)
         user.create_user()
+        messagebox.showinfo("", "User created successfully")
     else:
-        print("Please fill in both fields.")
+        messagebox.showwarning("Warning", "Please fill in both fields")
+        
     
 
 
