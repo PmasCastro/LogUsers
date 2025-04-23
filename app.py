@@ -1,12 +1,14 @@
+#User interface outline
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
+from userdb import User
+
 
 app = tb.Window(themename="darkly")   # Choose a theme
 app.title("Login App")
 app.geometry("1200x900")
 
 #Username
-
 username_label = tb.Label(app, text="Username:")
 username_label.pack(side="left", padx=5, pady=5)
 username_entry = tb.Entry(app)
@@ -18,6 +20,22 @@ password_label = tb.Label(app, text="Password:")
 password_label.pack(side="left", padx=5, pady=5)
 password_entry = tb.Entry(app, show="*")
 password_entry.pack(side="left", padx=5, pady=5)
+
+#Create user button
+
+def create_new_user():
+
+    username = username_entry.get()
+    password = password_entry.get()
+
+    if password and username:
+        user = User(username, password)
+        user.create_user()
+    else:
+        print("Please fill in both fields.")
+
+create_user_button = tb.Button(app, text="Create User", command=create_new_user)
+create_user_button.pack(side="left", padx=5, pady=5)
 
 
 app.mainloop()
