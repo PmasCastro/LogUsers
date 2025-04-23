@@ -22,7 +22,11 @@ password_entry.pack(side="left", padx=5, pady=5)
 
 #Create user button
 
-create_user_button = tb.Button(app, text="Create User", command=create_new_user)
+create_user_button = tb.Button(
+    app,
+    text="Create",
+    command=lambda: create_new_user(username_entry, password_entry)
+)
 create_user_button.pack(side="left", padx=5, pady=5)
 
 
