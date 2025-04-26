@@ -45,6 +45,14 @@ class Authenticator:
         cursor.execute(
             "UPDATE users SET isOnline=0 WHERE username =?", (username,)
             )
+        
+        cursor.execute("SELECT id FROM users WHERE username=?", (username,))
+        user = cursor.fetchone()
+        user_id = user[0]
+        cursor.execute("INSERT INTO login(username, user_id, event) VALUES (?, ?, ?)",
+                       (username, user_id, "logout")
+                       )
+
         conn.commit()
         print(f"User '{username}' is logged out")
         conn.close()
@@ -52,7 +60,7 @@ class Authenticator:
     
 user_login = Authenticator()
 
-user_login.login("Admin")
+user_login.logout("Admin")
 
 
 
