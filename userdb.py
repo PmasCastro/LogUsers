@@ -50,7 +50,7 @@ class User:
         conn.close()
         
 # #Example to create user
-# admin_user = User("Andy", "1234", is_admin=False)
+# admin_user = User("Admin", "1234", is_admin=True)
 # admin_user.create_user()
 
 
