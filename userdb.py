@@ -54,8 +54,6 @@ class User:
             print(f"User '{username}' was deleted.")
         conn.close()
 
-    def change_username():
-        pass
         
 # #Example to create user
 # admin_user = User("", "1234", "example@gmail.com", "969696969", is_admin=False)
