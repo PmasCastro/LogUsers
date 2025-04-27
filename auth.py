@@ -66,9 +66,9 @@ class Authenticator:
 
 
     
-# user_login = Authenticator()
+user_login = Authenticator()
 
-# user_login.login("Castro")
+user_login.logout("jscott")
 
 
 
