@@ -2,6 +2,7 @@
 import sqlite3
 import bcrypt
 
+
 DB_NAME = "users.db"
 
 class User:
@@ -57,8 +58,13 @@ class User:
         pass
         
 # #Example to create user
-# admin_user = User("Castro", "1234", is_admin=False)
+# admin_user = User("", "1234", "example@gmail.com", "969696969", is_admin=False)
 # admin_user.create_user()
+
+#Delete user
+# User.del_user("Castro")
+
+
 
 
 
