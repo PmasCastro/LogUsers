@@ -23,13 +23,19 @@ class User:
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            #VALUES placeholder (?, ?, ?, ?) prevents SQL injection
-            cursor.execute(
+            if "@" not in self.email or "." not in self.email:
+                    print("Invalid email format.")
+                    return
+            else:
+                #VALUES placeholder (?, ?, ?, ?) prevents SQL injection
+                cursor.execute(
                 "INSERT INTO users (username, password, email, phone, isOnline, isAdmin) VALUES (?, ?, ?, ?, ?, ?)", 
                 (self.username, hashed, self.email, self.phone,  0, int(self.is_admin))
                 )
             conn.commit()
-            #print(f"User '{self.username}' added successfully.")
+            print(f"User '{self.username}' created successfully.")
+
+        #If user already exists, print message and return
         except sqlite3.IntegrityError:
             print(f"User '{self.username}' already exists, please choose a different username.")
         finally:
@@ -52,9 +58,9 @@ class User:
         conn.close()
 
         
-# #Example to create user
-# admin_user = User("", "1234", "example@gmail.com", "969696969", is_admin=False)
-# admin_user.create_user()
+#Example to create user
+admin_user = User("PatoDonald", "1234", "exa mple@gmailcom", "969696969", is_admin=False)
+admin_user.create_user()
 
 #Delete user
 # User.del_user("Castro")

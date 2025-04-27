@@ -77,8 +77,45 @@ class UserManagement:
             conn.close()
         
 
-    def change_email():
-        pass
+    def change_email(self, username, old_email, new_email):
+
+        try:
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+
+            # Check if the username exists in the database
+            cursor.execute(
+                "SELECT username FROM users WHERE username=?", (username,))
+            result = cursor.fetchone()
+            
+            # Retrieve the old email from the database and returns it as old_email
+            cursor.execute(
+                "SELECT email FROM users WHERE username=?", (old_email,))
+            old_email = cursor.fetchone()
+
+            if result is None:
+                print(f"User '{username}' does not exist.")
+                return
+            else:
+                if " " in new_email:
+                    print("Email cannot contain spaces.")
+                    return
+                if "@" not in new_email or "." not in new_email:
+                    print("Invalid email format.")
+                    return
+                # Check if the new_email is equal to the old_username
+                if new_email == username:
+                    print("New email cannot be the same as the username.")
+                    return
+                
+                cursor.execute(
+                    "UPDATE users SET email=? WHERE username=?", (new_email, username))
+                conn.commit()
+                print(f"Email for user '{username}' changed successfully.")
+        finally:
+            conn.close()
+
+          
 
     def change_phone():
         pass
@@ -88,7 +125,7 @@ class UserManagement:
 
 
 manager = UserManagement()
-manager.change_password("Admin", "1234")
+manager.change_email("Admin", "main@admin.org")
         
 
  
