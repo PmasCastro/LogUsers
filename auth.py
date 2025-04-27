@@ -57,19 +57,13 @@ class Authenticator:
         print(f"User '{username}' is logged out")
         conn.close()
     
-    def change_username(self, username):
-        pass
-        # conn = sqlite3.connect(DB_NAME)
-        # cursor = conn.cursor()
-        # cursor.execute(
-        #     "UPDATE users SET isOnline=0 WHERE username =?", (username,)
-        #     )
+    
 
 
     
 user_login = Authenticator()
 
-user_login.logout("jscott")
+user_login.logout("Admin")
 
 
 

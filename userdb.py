@@ -2,7 +2,6 @@
 import sqlite3
 import bcrypt
 
-
 DB_NAME = "users.db"
 
 class User:
@@ -13,8 +12,6 @@ class User:
         self.phone = phone
         self.is_admin=is_admin
         
-        
-    
     #Add new user to db
     def create_user(self):
         if " " in self.username:
@@ -32,7 +29,7 @@ class User:
                 (self.username, hashed, self.email, self.phone,  0, int(self.is_admin))
                 )
             conn.commit()
-            print(f"User '{self.username}' added successfully.")
+            #print(f"User '{self.username}' added successfully.")
         except sqlite3.IntegrityError:
             print(f"User '{self.username}' already exists, please choose a different username.")
         finally:
@@ -67,6 +64,4 @@ class User:
 
 
             
-
-
 
