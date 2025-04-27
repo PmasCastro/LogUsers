@@ -5,10 +5,14 @@ import bcrypt
 DB_NAME = "users.db"
 
 class User:
-    def __init__(self, username, password, is_admin=False):
+    def __init__(self, username, password, email, phone, is_admin=False):
         self.username=username
         self.password=password
+        self.email = email
+        self.phone = phone
         self.is_admin=is_admin
+        
+        
     
     #Add new user to db
     def create_user(self):
@@ -23,8 +27,8 @@ class User:
             cursor = conn.cursor()
             #VALUES placeholder (?, ?, ?, ?) prevents SQL injection
             cursor.execute(
-                "INSERT INTO users (username, password, isOnline, isAdmin) VALUES (?, ?, ?, ?)", 
-                (self.username, hashed, 0, int(self.is_admin))
+                "INSERT INTO users (username, password, email, phone, isOnline, isAdmin) VALUES (?, ?, ?, ?, ?, ?)", 
+                (self.username, hashed, self.email, self.phone,  0, int(self.is_admin))
                 )
             conn.commit()
             print(f"User '{self.username}' added successfully.")
@@ -48,9 +52,12 @@ class User:
         else:
             print(f"User '{username}' was deleted.")
         conn.close()
+
+    def change_username():
+        pass
         
 # #Example to create user
-# admin_user = User("Admin", "1234", is_admin=True)
+# admin_user = User("Castro", "1234", is_admin=False)
 # admin_user.create_user()
 
 
