@@ -104,14 +104,14 @@ class UserManagement:
                     print("Invalid email format.")
                     return
                 # Check if the new_email is equal to the old_username
-                if new_email == username:
-                    print("New email cannot be the same as the username.")
+                if new_email == old_email:
+                    print("New email cannot be the same as the current e-mail.")
                     return
-                
-                cursor.execute(
+                else:
+                    cursor.execute(
                     "UPDATE users SET email=? WHERE username=?", (new_email, username))
-                conn.commit()
-                print(f"Email for user '{username}' changed successfully.")
+                    conn.commit()
+                    print(f"Email for user '{username}' changed successfully.")     
         finally:
             conn.close()
 
