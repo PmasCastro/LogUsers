@@ -18,7 +18,7 @@ class Authenticator:
         if result is None:
             print(f"User '{username}' does not exist.")
             conn.close()
-            return
+            return False
         
         hashed_password, is_online = result
 
@@ -27,7 +27,7 @@ class Authenticator:
         if not bcrypt.checkpw(password.encode('utf-8'), hashed_password):
             print("Invalid password")
             conn.close()
-            return
+            return False
         if is_online == 1:
             print(f"User '{username}' is already logged in")
             conn.close()
@@ -46,6 +46,7 @@ class Authenticator:
             conn.commit()
             print(f"User '{username}' is logged in")
             conn.close()
+            return True
     
 
     def logout(self, username):
@@ -70,9 +71,11 @@ class Authenticator:
 
 
     
-user_login = Authenticator()
+# user_login = Authenticator()
 
-user_login.login("PatoDonald", "1234")
+# # user_login.login("PatoDonald", "122334")
+
+# user_login.logout("PatoDonald")
 
 
 

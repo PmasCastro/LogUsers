@@ -1,9 +1,9 @@
-import gui.login_page as login_page
-import controller
+from gui.login_page import LoginPage  # Import your GUI class
+  # Import Authenticator
 
-def start_app():
-    login_page()  # Call the function to create the user interface
-    controller()  # Call the function that handles GUI/DB interactions
+def run():
+    login_app = LoginPage()
+    login_app.mainloop() 
 
 if __name__ == "__main__":
-    start_app()
+    run()  # Run the application when executing main.py

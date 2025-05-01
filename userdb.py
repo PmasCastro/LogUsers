@@ -58,9 +58,9 @@ class User:
         conn.close()
 
         
-#Example to create user
-admin_user = User("PatoDonald", "1234", "example@gmail.com", "969696969", is_admin=False)
-admin_user.create_user()
+# #Example to create user
+# admin_user = User("Pedro", "1234", "2@gmail.com", "969226969", is_admin=False)
+# admin_user.create_user()
 
 #Delete user
 # User.del_user("Castro")
