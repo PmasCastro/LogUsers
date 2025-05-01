@@ -1,6 +1,6 @@
 #takes care of user authentication, login, logouts
-
 import sqlite3
+import bcrypt
 
 DB_NAME="users.db"
 
@@ -9,17 +9,26 @@ class Authenticator:
     def __init__(self):
         pass
     
-    def login(self, username):
+    def login(self, username, password):
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
+        cursor.execute("SELECT password, isOnline FROM users WHERE username=?", (username,))
         result = cursor.fetchone()
         
         if result is None:
             print(f"User '{username}' does not exist.")
             conn.close()
             return
-        if result[0] == 1:
+        
+        hashed_password, is_online = result
+
+        #Verify password
+
+        if not bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+            print("Invalid password")
+            conn.close()
+            return
+        if is_online == 1:
             print(f"User '{username}' is already logged in")
             conn.close()
             return
@@ -63,7 +72,7 @@ class Authenticator:
     
 user_login = Authenticator()
 
-user_login.logout("Admin")
+user_login.login("PatoDonald", "1234")
 
 
 

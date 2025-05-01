@@ -59,7 +59,7 @@ class User:
 
         
 #Example to create user
-admin_user = User("PatoDonald", "1234", "exa mple@gmailcom", "969696969", is_admin=False)
+admin_user = User("PatoDonald", "1234", "example@gmail.com", "969696969", is_admin=False)
 admin_user.create_user()
 
 #Delete user
