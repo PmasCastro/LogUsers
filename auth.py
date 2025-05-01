@@ -8,6 +8,18 @@ class Authenticator:
 
     def __init__(self):
         pass
+
+    def online_status(self, username):
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
+        result = cursor.fetchone()
+        if result and result[0] == 1:
+            print(f"User '{username}' is already logged in")
+            conn.close()
+            return True
+        return False
+        
     
     def login(self, username, password):
         conn = sqlite3.connect(DB_NAME)
@@ -71,9 +83,9 @@ class Authenticator:
 
 
     
-user_login = Authenticator()
+# user_login = Authenticator()
 
-# # user_login.login("PatoDonald", "122334")
+# # # user_login.login("PatoDonald", "122334")
 
 # user_login.logout("PatoDonald")
 # user_login.logout("Admin")
