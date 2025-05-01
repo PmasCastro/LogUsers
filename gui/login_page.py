@@ -1,8 +1,9 @@
-#User interface outline
-import ttkbootstrap as tb
-from ttkbootstrap.constants import *
+## Login Page using customtkinter
+
 import customtkinter as ctk 
 import tkinter.messagebox as tkmb
+# from auth import Authenticator
+
 
 ctk.set_appearance_mode("dark") 
   
@@ -10,33 +11,39 @@ ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue") 
   
 app = ctk.CTk() 
-app.geometry("700x400") 
-app.title("Modern Login UI using Customtkinter") 
+app.geometry("400x400") 
+app.title("Login Page")
+
+
+class LoginPage(ctk.CTkFrame): 
+    def __init__(self, master=None): 
+        super().__init__(master) 
+        self.master = master 
+        self.create_widgets() 
   
-label = ctk.CTkLabel(app,text="This is the main UI page") 
+    def create_widgets(self): 
+        self.label = ctk.CTkLabel(self, text="Login Page") 
+        self.label.pack(pady=20) 
   
-label.pack(pady=20) 
+        self.user_entry = ctk.CTkEntry(self, placeholder_text="Username") 
+        self.user_entry.pack(pady=12, padx=10)
   
+        self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*") 
+        self.user_pass.pack(pady=12, padx=10) 
   
-frame = ctk.CTkFrame(master=app) 
-frame.pack(pady=20,padx=40,fill='both',expand=True) 
+        self.button = ctk.CTkButton(self, text='Login', command=self.login) 
+        self.button.pack(pady=12, padx=10) 
   
-label = ctk.CTkLabel(master=frame,text='Modern Login System UI') 
-label.pack(pady=12,padx=10) 
+    def login(self): 
+        username = self.user_entry.get() 
+        password = self.user_pass.get() 
+        if username == "" or password == "": 
+            tkmb.showerror("Error", "Please fill in all fields") 
+            return
+        
+    
   
-  
-user_entry= ctk.CTkEntry(master=frame,placeholder_text="Username") 
-user_entry.pack(pady=12,padx=10) 
-  
-user_pass= ctk.CTkEntry(master=frame,placeholder_text="Password",show="*") 
-user_pass.pack(pady=12,padx=10) 
-  
-  
-# button = ctk.CTkButton(master=frame,text='Login',command=login) 
-# button.pack(pady=12,padx=10) 
-  
-checkbox = ctk.CTkCheckBox(master=frame,text='Remember Me') 
-checkbox.pack(pady=12,padx=10) 
-  
+login_page = LoginPage(master=app)
+login_page.pack(fill="both", expand=True)
   
 app.mainloop()
