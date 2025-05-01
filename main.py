@@ -1,38 +1,56 @@
+# This is the main entry point for the application. It initializes the GUI and starts the main loop.
+# It also handles the flow of the app, including managing the flow between different pages.
 from gui.login_page import LoginPage
-import customtkinter as ctk 
-import tkinter.messagebox as tkmb  
+import customtkinter as ctk
 
+class App(ctk.CTk):
 
-class AppController:
+    #Sets up the different pages' geometry
     def __init__(self):
-        self.root = ctk.CTk()  # Create the main application window
-        self.root.geometry("350x400")  # Set the window size
-        self.root.title("Login App")  # Set the window title
+        super().__init__()
+        self.geometry("600x500")
+        self.title("Login App")
 
-        # Configure grid layout for the main window
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
+        # Configure grid for the main window
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
-        # Create an instance of the LoginPage class
-        self.login_page = LoginPage(master=self.root)
+        # Outer frame with background color
+        self.background_frame = ctk.CTkFrame(self, fg_color="#4C5B61")
+        self.background_frame.grid(row=0, column=0, sticky="nsew")
+        self.background_frame.grid_rowconfigure(0, weight=1)
+        self.background_frame.grid_columnconfigure(0, weight=1)
+        
+        #Loads the login page on app start
+        self.load_login_page()
     
+    #This method creates an instance of the LoginPage and sets its master to the background frame.
+    def load_login_page(self):
+        self.login_page = LoginPage(master=self.background_frame)
+
+    def load_main_page(self):
+        self.login_page.destroy()
+        pass
     
+    def load_signup_page(self):
+        pass
+    
+    def load_forgot_password_page(self):
+        pass
 
+    def load_user_settings(self):
+        pass
 
+    # This method is called when the app is closed and ensures proper cleanup.
     def run(self):
-        self.login_page.pack(expand=True, fill="both")  # Pack the login page into the main window
-        self.root.mainloop()  # Start the main event loop
-
-
-
-
-def run():
-    login_app = LoginPage()
-    
-    # Bind the close event to a custom function
-    login_app.protocol("WM_DELETE_WINDOW", login_app.on_close)
-    
-    login_app.mainloop()  # Run the application
+        
+        """Run the main Tkinter loop."""
+        self.protocol("WM_DELETE_WINDOW", self.destroy)
+        self.mainloop()
 
 if __name__ == "__main__":
-    run()  # Run the application when executing main.py
+    app = App()
+    app.run()
+    
+    
+
