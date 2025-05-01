@@ -71,11 +71,13 @@ class Authenticator:
 
 
     
-# user_login = Authenticator()
+user_login = Authenticator()
 
 # # user_login.login("PatoDonald", "122334")
 
 # user_login.logout("PatoDonald")
+# user_login.logout("Admin")
+# user_login.logout("Pedro")
 
 
 
