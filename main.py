@@ -1,6 +1,7 @@
 # This is the main entry point for the application. It initializes the GUI and starts the main loop.
 # It also handles the flow of the app, including managing the flow between different pages.
 from gui.login_page import LoginPage
+from gui.main_page import MainPage
 import customtkinter as ctk
 
 class App(ctk.CTk):
@@ -21,17 +22,34 @@ class App(ctk.CTk):
         self.background_frame.grid_rowconfigure(0, weight=1)
         self.background_frame.grid_columnconfigure(0, weight=1)
         
+        #Keeps track of the current page
+        self.current_page = None 
+        
         #Loads the login page on app start
         self.load_login_page()
     
     #This method creates an instance of the LoginPage and sets its master to the background frame.
     def load_login_page(self):
+
+        #Checks if self.current_page attribute is not None, and if so, it destroys the current page.
+        if self.current_page:
+            self.current_page.destroy()
+
+        #Creates an instance of the LoginPage class and sets its master to the background frame.    
         self.login_page = LoginPage(master=self.background_frame)
 
+        #After creating the new instance of LoginPage, this updates the self.current_page
+        #attribute to hold a reference to the newly created LoginPage instance.
+        self.current_page = self.login_page
+
+        self.login_page.app = self
+
     def load_main_page(self):
-        self.login_page.destroy()
-        pass
-    
+        if self.current_page:
+            self.current_page.destroy()
+        self.main_page = MainPage(master=self.background_frame)
+        self.current_page = self.main_page
+        
     def load_signup_page(self):
         pass
     

@@ -1,12 +1,13 @@
-import customtkinter as ctk 
-# import tkinter.messagebox as tkmb
+import customtkinter as ctk
 
-class MainUI(ctk.CTkFrame):
-    def __init__(self, master=None, username=""):
+class MainPage(ctk.CTkFrame):
+    def __init__(self, master=None):
         super().__init__(master)
-        self.configure(width=600, height=500)
-        self.grid(row=0, column=0)
-        
-        # Add the "Hello" message
-        self.label = ctk.CTkLabel(self, text=f"Hello, {username}!", font=ctk.CTkFont(size=18))
-        self.label.grid(row=0, column=0, pady=20)
+        self.configure(fg_color="white")  # Example background color
+        self.grid(row=0, column=0, sticky="nsew")
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.label = ctk.CTkLabel(self, text="Welcome to the Main Page!", font=ctk.CTkFont(size=24))
+        self.label.pack(pady=50)

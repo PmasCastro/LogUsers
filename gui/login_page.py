@@ -50,6 +50,8 @@ class LoginPage(ctk.CTkFrame):
             auth = Authenticator()
             if auth.login(username, password):
                 tkmb.showinfo("Success", "Login successful")
-                self.master.load_main_page()
+                if self.app:
+                    self.app.load_main_page()
+
             else:
                 tkmb.showerror("Error", "Invalid username or password")
