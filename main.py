@@ -47,8 +47,13 @@ class App(ctk.CTk):
     def load_main_page(self, username):
         if self.current_page:
             self.current_page.destroy()
+
+            #This method creates an instance of the MainPage class and sets its master to the background frame.
+            #It also passes the username from LoginPage to the MainPage instance.
         self.main_page = MainPage(master=self.background_frame, username=username)
         self.current_page = self.main_page
+
+        self.main_page.app = self
         
     def load_signup_page(self):
         pass
