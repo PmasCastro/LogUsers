@@ -39,7 +39,6 @@ class LoginPage(ctk.CTkFrame):
         self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*", width=250)
         self.user_pass.grid(row=3, column=0, columnspan=2, pady=8)
 
-        self.remember_var = ctk.BooleanVar()
         self.remember = ctk.CTkCheckBox(self, text="Remember me", variable=self.remember_var)
         self.remember.grid(row=4, column=0, sticky="w", padx=48)
 
@@ -80,7 +79,4 @@ class LoginPage(ctk.CTkFrame):
             
             else:
                 tkmb.showerror("Error", "Wrong password")
-    def remember_me(self):
-        
-
-        pass
+    

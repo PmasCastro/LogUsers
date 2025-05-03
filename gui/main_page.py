@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from auth import Authenticator
+import os
+import json
 
 class MainPage(ctk.CTkFrame):
     def __init__(self, master=None, username=None):
@@ -30,5 +32,8 @@ class MainPage(ctk.CTkFrame):
         if self.username:
             auth = Authenticator()
             auth.logout(self.username)
+
+            if os.path.exists("session.json"):
+                     os.remove("session.json")
             if self.app:
                 self.app.load_login_page()

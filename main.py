@@ -10,7 +10,9 @@
 from gui.login_page import LoginPage
 from gui.main_page import MainPage
 import customtkinter as ctk
-from auth import Authenticator  
+from auth import Authenticator 
+import os
+import json
 
 class App(ctk.CTk):
 
@@ -19,6 +21,8 @@ class App(ctk.CTk):
         super().__init__()
         self.geometry("600x500")
         self.title("Login App")
+
+        self.remember_var = ctk.BooleanVar(value=False)  
 
         self.logged_in_username = None
 
@@ -39,12 +43,21 @@ class App(ctk.CTk):
         self.load_login_page()
         
         self.login_page.app = self
+        
+        session_file = "session.json"
+        if os.path.exists(session_file):
+            with open(session_file, "r") as f:
+                session_data = json.load(f)
+                if session_data.get("remember_me"):
+                    username = session_data.get("username")
+                    self.logged_in_username = username
+                    self.load_main_page(username)
     
     def remember_checked(self):
 
         #Access the remember_var passed from the LoginPage instance
         #Checks if the remember_var attribute exists and if it is checked (True).
-        if hasattr(self,'rember_var') and self.remember_var.get():
+        if hasattr(self,'remember_var') and self.remember_var.get():
             return True
         return False
 
@@ -92,9 +105,11 @@ class App(ctk.CTk):
 
         #Checks if the user is logged in and if the remember me checkbox is not checked.
         #It logs the user out
-        if self.logged_in_username and not self.remember_checked():
-            auth = Authenticator()
-            auth.logout(self.logged_in_username)
+        if self.logged_in_username:
+            if not self.remember_var.get():
+                auth = Authenticator()
+                auth.logout(self.logged_in_username)
+                
         self.destroy()
 
     def run(self):
@@ -104,6 +119,3 @@ class App(ctk.CTk):
 if __name__ == "__main__":
     app = App()
     app.run()
-    
-    
-
