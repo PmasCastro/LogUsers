@@ -2,18 +2,27 @@
 from auth import Authenticator
 import customtkinter as ctk
 import tkinter.messagebox as tkmb
+import json
+import os
+
 
 ctk.set_appearance_mode("light")  # Or 'dark' for dark mode
 ctk.set_default_color_theme("blue")
 
 
 class LoginPage(ctk.CTkFrame):
-    def __init__(self, master=None):
+    def __init__(self, master=None, app=None):
         super().__init__(master)
+        self.app = app
         self.configure(width=350, height=400, corner_radius=15, fg_color="#829191")
         self.grid_propagate(False)
         self.grid(row=0, column=0)
+        
 
+        #remember_var is a BooleanVar that will be used to store the state of the "Remember me" checkbox.
+        #It is initialized to False, meaning the checkbox is not checked by default.
+        #Without this, the checkbox will not be able to store its state.
+        self.remember_var = ctk.BooleanVar()
         self.create_widgets()
 
     def create_widgets(self):
@@ -30,7 +39,8 @@ class LoginPage(ctk.CTkFrame):
         self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*", width=250)
         self.user_pass.grid(row=3, column=0, columnspan=2, pady=8)
 
-        self.remember = ctk.CTkCheckBox(self, text="Remember me")
+        self.remember_var = ctk.BooleanVar()
+        self.remember = ctk.CTkCheckBox(self, text="Remember me", variable=self.remember_var)
         self.remember.grid(row=4, column=0, sticky="w", padx=48)
 
         self.forgot = ctk.CTkLabel(self, text="Forgot your password?", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
@@ -41,19 +51,36 @@ class LoginPage(ctk.CTkFrame):
         self.button.grid(row=5, column=0, columnspan=2, pady=20)
 
     def login(self):
+        # Check if the username and password fields are empty
         username = self.username_entry.get()
         password = self.user_pass.get()
+
         if username == "" or password == "":
             tkmb.showerror("Error", "Please fill in all fields")
             return
-        else:
-            auth = Authenticator()
-            if auth.login(username, password):
-                tkmb.showinfo("Success", "Login successful")
-                if self.app:
-                    #Store the username in the app instance for later use
-                    self.app.logged_in_username = username
-                    self.app.load_main_page(username)
+        
+        auth = Authenticator()
+        if auth.login(username, password):
+            tkmb.showinfo("Success", "Login successful")
 
+            if self.remember_var.get():
+                # Store the username in a json file
+                with open("session.json", "w") as f:
+                    json.dump({"username": username, "remember_me": True}, f)
+
+            # Clear any existing session        
             else:
-                tkmb.showerror("Error", "Invalid username or password")
+                 if os.path.exists("session.json"):
+                     os.remove("session.json")
+
+            if self.app:
+                #Store the username in the app instance for later use
+                self.app.logged_in_username = username
+                self.app.load_main_page(username)
+            
+            else:
+                tkmb.showerror("Error", "Wrong password")
+    def remember_me(self):
+        
+
+        pass
