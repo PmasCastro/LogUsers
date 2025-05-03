@@ -73,6 +73,7 @@ class LoginPage(ctk.CTkFrame):
                      os.remove("session.json")
 
             if self.app:
+                self.app.remember_var.set(self.remember_var.get())
                 #Store the username in the app instance for later use
                 self.app.logged_in_username = username
                 self.app.load_main_page(username)

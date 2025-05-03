@@ -6,7 +6,6 @@
 #allowing the app to properly handle user session persistence
 #(e.g., saving/loading the "Remember me" state in session.json).
 
-
 from gui.login_page import LoginPage
 from gui.main_page import MainPage
 import customtkinter as ctk
@@ -50,6 +49,14 @@ class App(ctk.CTk):
                 session_data = json.load(f)
                 if session_data.get("remember_me"):
                     username = session_data.get("username")
+
+                    #Set the remember_var to True if the checkbox was checked
+                    #This ensures that the checkbox state is consistent if the user never loggs out and closes the app.
+                    self.remember_var.set(True)  
+
+                    # auth = Authenticator()
+                    # auth.login(username)
+
                     self.logged_in_username = username
                     self.load_main_page(username)
     
@@ -94,21 +101,18 @@ class App(ctk.CTk):
     
     def load_forgot_password_page(self):
         pass
-
-
-
+    
     def load_user_settings(self):
         pass
-
-
+    
     def on_close(self):
+        print("Remember Me:", self.remember_var.get())  #For debugging purposes (returns the state of the checkbox)
+        #If the remember me checkbox is checked, it will log "Remember Me: True" in the console. Else, it will log "Remember Me: False".
 
         #Checks if the user is logged in and if the remember me checkbox is not checked.
-        #It logs the user out
-        if self.logged_in_username:
-            if not self.remember_var.get():
-                auth = Authenticator()
-                auth.logout(self.logged_in_username)
+        if self.logged_in_username and not self.remember_var.get():
+            auth = Authenticator()
+            auth.logout(self.logged_in_username)
                 
         self.destroy()
 

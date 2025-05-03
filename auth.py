@@ -60,24 +60,19 @@ class Authenticator:
             conn.close()
             return True
     
-
     def logout(self, username):
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        cursor.execute(
-            "UPDATE users SET isOnline=0 WHERE username =?", (username,)
-            )
-        
         cursor.execute("SELECT id FROM users WHERE username=?", (username,))
+        
         user = cursor.fetchone()
-        user_id = user[0]
-        cursor.execute("INSERT INTO login(username, user_id, event) VALUES (?, ?, ?)",
-                       (username, user_id, "logout")
-                       )
-
-        conn.commit()
-        print(f"User '{username}' is logged out")
-        conn.close()
+        if user:
+            user_id = user[0]
+            cursor.execute("UPDATE users SET isOnline=0 WHERE username=?", (username,))
+            cursor.execute("INSERT INTO login (username, user_id, event) VALUES (?, ?, ?)",
+                       (username, user_id, "logout"))
+            conn.commit()
+            conn.close()
     
     
 
