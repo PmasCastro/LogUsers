@@ -20,7 +20,6 @@ class Authenticator:
             return True
         return False
         
-    
     def login(self, username, password):
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
@@ -66,6 +65,7 @@ class Authenticator:
         cursor.execute("SELECT id FROM users WHERE username=?", (username,))
         
         user = cursor.fetchone()
+        
         if user:
             user_id = user[0]
             cursor.execute("UPDATE users SET isOnline=0 WHERE username=?", (username,))

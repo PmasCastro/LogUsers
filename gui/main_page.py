@@ -1,16 +1,15 @@
 import customtkinter as ctk
 from auth import Authenticator
 import os
-import json
 
 class MainPage(ctk.CTkFrame):
     def __init__(self, master=None, username=None):
         super().__init__(master)
 
         #This line sets the username attribute to the username passed to the constructor from the LoginPage.
-        #through the App instance on main.py (def_load_main_page > self.main_page = MainPage(
-        #                                                                               master=self.background_frame,
-        #                                                                                 username=username)).
+        #through the App instance on main.py:
+        # (def_load_main_page > self.main_page = MainPage(master=self.background_frame,username=username)).
+                                                                                  
         self.username = username
 
         self.configure(fg_color="#829191")  # Example background color
