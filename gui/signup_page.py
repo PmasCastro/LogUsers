@@ -2,13 +2,14 @@ import customtkinter as ctk
 import tkinter.messagebox as tkmb
 from userdb import User
 
-class UserCreateForm(ctk.CTkFrame):
-    def __init__(self, master=None):
+class SignupPage(ctk.CTkFrame):
+    def __init__(self, master=None, app=None):
         super().__init__(master)
         self.configure(width=350, height=400, corner_radius=15, fg_color="#829191")
         self.grid_propagate(False)
         self.grid(row=0, column=0)
-        self.app = None
+        self.app = app
+        
 
         self.create_widgets()
 
@@ -36,12 +37,7 @@ class UserCreateForm(ctk.CTkFrame):
         password = self.user_pass.get()
         email = self.email_entry.get()
         phone = self.phone_entry.get()
-
-
-        if username == "" or password == "":
-            tkmb.showerror("Error", "Please fill in all fields")
-            return
-
+        
         user = User(username=username, password=password, email=email, phone=phone)
 
         if user.create_user():

@@ -6,6 +6,7 @@
 #allowing the app to properly handle user session persistence
 #(e.g., saving/loading the "Remember me" state in session.json).
 
+from gui.signup_page import SignupPage
 from gui.login_page import LoginPage
 from gui.main_page import MainPage
 import customtkinter as ctk
@@ -97,7 +98,14 @@ class App(ctk.CTk):
         self.main_page.app = self
         
     def load_signup_page(self):
-        pass
+        if self.current_page:
+            self.current_page.destroy()
+        
+        self.signup_page = SignupPage(master=self.background_frame, app=self)
+        self.current_page = self.signup_page
+
+        self.signup_page.app = self
+
     
     def load_forgot_password_page(self):
         pass

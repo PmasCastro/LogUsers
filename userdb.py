@@ -6,17 +6,20 @@ DB_NAME = "users.db"
 
 class User:
     def __init__(self, username, password, email, phone, is_admin=False):
-        self.username=username
-        self.password=password
+        
+        self.username = username
+        self.password = password
         self.email = email
         self.phone = phone
         self.is_admin=is_admin
         
     #Add new user to db
     def create_user(self):
-        if " " in self.username:
-            print("Username cannot contain spaces")
+
+        if not all(field.strip() for field in [self.username, self.password, self.email, self.phone]):
+            print("Please fill in all fields")
             return
+
         
         #encrypt the password
         hashed = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
@@ -59,7 +62,7 @@ class User:
 
         
 # #Example to create user
-# admin_user = User("Pedro", "1234", "2@gmail.com", "969226969", is_admin=False)
+# admin_user = User("", "1234", "2@gmail.com", " 2", is_admin=False)
 # admin_user.create_user()
 
 #Delete user
