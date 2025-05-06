@@ -9,56 +9,48 @@ class Authenticator:
     def __init__(self):
         pass
 
-    def online_status(self, username):
-        conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-        cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
-        result = cursor.fetchone()
-        if result and result[0] == 1:
-            print(f"User '{username}' is already logged in")
-            conn.close()
-            return True
-        return False
+    # def online_status(self, username):
+    #     conn = sqlite3.connect(DB_NAME)
+    #     cursor = conn.cursor()
+    #     cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
+    #     result = cursor.fetchone()
+    #     if result and result[0] == 1:
+    #         print(f"User '{username}' is already logged in")
+    #         conn.close()
+    #         return True
+    #     return False
         
     def login(self, username, password):
-        conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-        cursor.execute("SELECT password, isOnline FROM users WHERE username=?", (username,))
-        result = cursor.fetchone()
-        
-        if result is None:
-            print(f"User '{username}' does not exist.")
-            conn.close()
-            return False
-        
-        hashed_password, is_online = result
+        try:
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT id, password, isOnline FROM users WHERE username=?", (username,))
+                result = cursor.fetchone()
+                
+                if result is None:
+                    raise ValueError("User does not exist.")
+                    
 
-        #Verify password
+                user_id, hashed_password, is_online = result
+                
+                if not bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+                    raise ValueError("Password is incorrect.")
+                
+                if is_online == 1:
+                    raise ValueError("User is already logged in.")
+                
+                cursor.execute("UPDATE users SET isOnline=1 WHERE username = ?", (username,))
+                cursor.execute(
+                    "INSERT INTO login (username, user_id, event) VALUES (?, ?, ?)",
+                    (username, user_id, "login")
+                    )
+                print("User logged in successfully")
+                conn.commit()
 
-        if not bcrypt.checkpw(password.encode('utf-8'), hashed_password):
-            print("Invalid password")
+                return True
+        finally:
             conn.close()
-            return False
-        if is_online == 1:
-            print(f"User '{username}' is already logged in")
-            conn.close()
-            return
-        else:
-            cursor.execute("SELECT id FROM users WHERE username=?", (username,))
-            user = cursor.fetchone()
-            user_id = user[0]
-            cursor.execute(
-                "UPDATE users SET isOnline=1 WHERE username =?", (username,)
-                )
-            cursor.execute(
-                "INSERT INTO login (username, user_id, event) VALUES (?, ?, ?)",
-                (username, user_id, "login")
-            )
-            conn.commit()
-            print(f"User '{username}' is logged in")
-            conn.close()
-            return True
-    
+
     def logout(self, username):
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
