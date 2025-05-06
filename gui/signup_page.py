@@ -16,6 +16,9 @@ class SignupPage(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text="Create a new account", font=ctk.CTkFont(size=18, weight="bold"))
         self.label.grid(row=0, column=0, columnspan=2, pady=(20, 5))
 
+        self.turn_back_btn = ctk.CTkButton(self, text='Back to login', width=250, command=lambda: self.app.load_login_page())
+        self.turn_back_btn.grid(row=1, column=0, columnspan=2, pady=(0, 20))
+
         self.username_entry = ctk.CTkEntry(self, placeholder_text="Username", width=250)
         self.username_entry.grid(row=1, column=1, columnspan=2, pady=8)
 

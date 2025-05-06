@@ -29,7 +29,7 @@ class LoginPage(ctk.CTkFrame):
 
         self.signup_label = ctk.CTkLabel(self, text="or create account", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
         self.signup_label.grid(row=1, column=0, columnspan=2, pady=(0, 20))
-        self.signup_label.bind("<Button-1>", lambda e: self.signup())
+        self.signup_label.bind("<Button-1>", lambda e: self.app.load_signup_page())
 
         self.username_entry = ctk.CTkEntry(self, placeholder_text="Username", width=250)
         self.username_entry.grid(row=2, column=0, columnspan=2, pady=8)
@@ -81,7 +81,7 @@ class LoginPage(ctk.CTkFrame):
             else:
                 tkmb.showerror("Error", "Wrong password")
     
-    def signup(self):
-        if self.app:
-            self.app.load_signup_page()
+    # def signup(self):
+    #     if self.app:
+    #         self.app.load_signup_page()
        
