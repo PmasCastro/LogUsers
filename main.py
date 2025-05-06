@@ -31,7 +31,7 @@ class App(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)
 
         # Outer frame with background color
-        self.background_frame = ctk.CTkFrame(self, fg_color="#4C5B61") 
+        self.background_frame = ctk.CTkFrame(self, fg_color="#4C5B61")  #4C5B61
         self.background_frame.grid(row=0, column=0, sticky="nsew")
         self.background_frame.grid_rowconfigure(0, weight=1)
         self.background_frame.grid_columnconfigure(0, weight=1)
@@ -120,7 +120,7 @@ class App(ctk.CTk):
         #Checks if the user is logged in and if the remember me checkbox is not checked.
         if self.logged_in_username and not self.remember_var.get():
             auth = Authenticator()
-            auth.logout(self.logged_in_username)
+            auth.logout_user(self.logged_in_username)
                 
         self.destroy()
 

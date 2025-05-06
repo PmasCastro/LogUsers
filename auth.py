@@ -20,7 +20,7 @@ class Authenticator:
     #         return True
     #     return False
         
-    def login(self, username, password):
+    def authenticate_user(self, username, password):
         try:
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
@@ -30,7 +30,6 @@ class Authenticator:
                 if result is None:
                     raise ValueError("User does not exist.")
                     
-
                 user_id, hashed_password, is_online = result
                 
                 if not bcrypt.checkpw(password.encode('utf-8'), hashed_password):
@@ -51,7 +50,7 @@ class Authenticator:
         finally:
             conn.close()
 
-    def logout(self, username):
+    def logout_user(self, username):
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM users WHERE username=?", (username,))

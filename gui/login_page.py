@@ -44,10 +44,10 @@ class LoginPage(ctk.CTkFrame):
         self.forgot.grid(row=4, column=1, sticky="e", padx=8)
         self.forgot.bind("<Button-1>", lambda e: tkmb.showinfo("Reset", "Redirecting to password reset"))
 
-        self.button = ctk.CTkButton(self, text='Sign in', width=250, command=self.login)
+        self.button = ctk.CTkButton(self, text='Sign in', width=250, command=self.handle_login)
         self.button.grid(row=5, column=0, columnspan=2, pady=20)
 
-    def login(self):
+    def handle_login(self):
         # Check if the username and password fields are empty
         username = self.username_entry.get()
         password = self.user_pass.get()
@@ -62,7 +62,7 @@ class LoginPage(ctk.CTkFrame):
         auth = Authenticator()
 
         try:
-            if auth.login(username, password):
+            if auth.authenticate_user(username, password):
                 tkmb.showinfo("Success", "Login successful")
                 if self.remember_var.get():                    
                     

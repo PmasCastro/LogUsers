@@ -23,14 +23,14 @@ class MainPage(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text=welcome_text, font=ctk.CTkFont(size=24))
         self.label.grid(row=0, column=0, columnspan=2, pady=(20, 5))
 
-        self.button = ctk.CTkButton(self, text='Logout', width=250, command=self.log_out)
+        self.button = ctk.CTkButton(self, text='Logout', width=250, command=self.handle_logout)
         self.button.grid(row=1, column=0, columnspan=2, pady=20)
 
-    def log_out(self):
+    def handle_logout(self):
 
         if self.username:
             auth = Authenticator()
-            auth.logout(self.username)
+            auth.logout_user(self.username)
 
             if os.path.exists("session.json"):
                      os.remove("session.json")
