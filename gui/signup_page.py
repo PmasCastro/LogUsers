@@ -42,6 +42,7 @@ class SignupPage(ctk.CTkFrame):
         email = self.email_entry.get()
         phone = self.phone_entry.get()
         
+        
         User(username=username, password=password, email=email, phone=phone)
         tkmb.showinfo("Success", "Account created successfully!")
 

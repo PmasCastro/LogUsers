@@ -47,6 +47,8 @@ class UserManagement:
     
     def change_password(self, username, new_password):
 
+        #Need to refactor to check the old password before changing it
+
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()

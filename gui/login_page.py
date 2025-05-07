@@ -1,4 +1,3 @@
-## Login Page using customtkinter
 from auth import Authenticator
 import customtkinter as ctk
 import tkinter.messagebox as tkmb
@@ -15,6 +14,7 @@ class LoginPage(ctk.CTkFrame):
         self.configure(width=350, height=400, corner_radius=15, fg_color="#829191")
         self.grid_propagate(False)
         self.grid(row=0, column=0)
+        self.columnconfigure((0, 1), weight=1)
         
 
         #remember_var is a BooleanVar that will be used to store the state of the "Remember me" checkbox.
@@ -37,15 +37,23 @@ class LoginPage(ctk.CTkFrame):
         self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*", width=250)
         self.user_pass.grid(row=3, column=0, columnspan=2, pady=8)
 
-        self.remember = ctk.CTkCheckBox(self, text="Remember me", variable=self.remember_var)
-        self.remember.grid(row=4, column=0, sticky="w", padx=38)
+        self.remember = ctk.CTkCheckBox(
+            self,
+            text="Remember me",
+            variable=self.remember_var,
+            font=ctk.CTkFont(size=12),              
+            checkbox_height=16,                     
+            checkbox_width=16
+            )
+        self.remember.grid(row=4, column=0, columnspan=2, sticky="w", padx=50)                        
 
-        self.forgot = ctk.CTkLabel(self, text="Forgot your password?", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
-        self.forgot.grid(row=4, column=1, sticky="e", padx=8)
-        self.forgot.bind("<Button-1>", lambda e: tkmb.showinfo("Reset", "Redirecting to password reset"))
 
         self.button = ctk.CTkButton(self, text='Sign in', width=250, command=self.handle_login)
         self.button.grid(row=5, column=0, columnspan=2, pady=20)
+
+        self.forgot = ctk.CTkLabel(self, text="Forgot your password?", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
+        self.forgot.grid(row=6, column=0, columnspan=2, padx=8)
+        self.forgot.bind("<Button-1>", lambda e: tkmb.showinfo("Reset", "Redirecting to password reset"))
 
     def handle_login(self):
         # Check if the username and password fields are empty
@@ -89,7 +97,4 @@ class LoginPage(ctk.CTkFrame):
                 tkmb.showerror("Error", "User is already logged in")
             return
 
-        
-                
-    
         
