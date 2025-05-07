@@ -38,7 +38,7 @@ class LoginPage(ctk.CTkFrame):
         self.user_pass.grid(row=3, column=0, columnspan=2, pady=8)
 
         self.remember = ctk.CTkCheckBox(self, text="Remember me", variable=self.remember_var)
-        self.remember.grid(row=4, column=0, sticky="w", padx=48)
+        self.remember.grid(row=4, column=0, sticky="w", padx=38)
 
         self.forgot = ctk.CTkLabel(self, text="Forgot your password?", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
         self.forgot.grid(row=4, column=1, sticky="e", padx=8)

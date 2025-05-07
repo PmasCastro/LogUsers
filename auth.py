@@ -8,17 +8,6 @@ class Authenticator:
 
     def __init__(self):
         pass
-
-    # def online_status(self, username):
-    #     conn = sqlite3.connect(DB_NAME)
-    #     cursor = conn.cursor()
-    #     cursor.execute("SELECT isOnline FROM users WHERE username=?", (username,))
-    #     result = cursor.fetchone()
-    #     if result and result[0] == 1:
-    #         print(f"User '{username}' is already logged in")
-    #         conn.close()
-    #         return True
-    #     return False
         
     def authenticate_user(self, username, password):
         try:
@@ -60,8 +49,9 @@ class Authenticator:
         if user:
             user_id = user[0]
             cursor.execute("UPDATE users SET isOnline=0 WHERE username=?", (username,))
-            cursor.execute("INSERT INTO login (username, user_id, event) VALUES (?, ?, ?)",
-                       (username, user_id, "logout"))
+            cursor.execute(
+                "INSERT INTO login (username, user_id, event) VALUES (?, ?, ?)",
+                (username, user_id, "logout"))
             conn.commit()
             conn.close()
     

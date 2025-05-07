@@ -9,6 +9,7 @@ class SignupPage(ctk.CTkFrame):
         self.configure(width=350, height=400, corner_radius=15, fg_color="#829191")
         self.grid_propagate(False)
         self.grid(row=0, column=0)
+        self.columnconfigure((0, 1), weight=1)
         
         self.create_widgets()
 
@@ -16,23 +17,24 @@ class SignupPage(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text="Create a new account", font=ctk.CTkFont(size=18, weight="bold"))
         self.label.grid(row=0, column=0, columnspan=2, pady=(20, 5))
 
-        self.turn_back_btn = ctk.CTkButton(self, text='Back to login', width=250, command=lambda: self.app.load_login_page())
+        self.turn_back_btn = ctk.CTkButton(self, text='Back to login', width=150, command=lambda: self.app.load_login_page())
         self.turn_back_btn.grid(row=1, column=0, columnspan=2, pady=(0, 20))
 
         self.username_entry = ctk.CTkEntry(self, placeholder_text="Username", width=250)
-        self.username_entry.grid(row=1, column=1, columnspan=2, pady=8)
+        self.username_entry.grid(row=2, column=0, columnspan=2, pady=8)
+
 
         self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*", width=250)
-        self.user_pass.grid(row=2, column=0, columnspan=2, pady=8)
+        self.user_pass.grid(row=3, column=0, columnspan=2, pady=8)
 
         self.email_entry = ctk.CTkEntry(self, placeholder_text="E-mail", width=250)
-        self.email_entry.grid(row=3, column=0, columnspan=2, pady=8)
+        self.email_entry.grid(row=4, column=0, columnspan=2, pady=8)
 
         self.phone_entry = ctk.CTkEntry(self, placeholder_text="Phone number", width=250)
-        self.phone_entry.grid(row=4, column=0, columnspan=2, pady=8)
+        self.phone_entry.grid(row=5, column=0, columnspan=2, pady=8)
 
         self.button = ctk.CTkButton(self, text='Create Account', width=250, command=self.create_account)
-        self.button.grid(row=5, column=0, columnspan=2, pady=(20))
+        self.button.grid(row=6, column=0, columnspan=2, pady=(20))
 
     def create_account(self):
         username = self.username_entry.get()
