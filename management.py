@@ -126,8 +126,8 @@ class UserManagement:
         pass
 
 
-manager = UserManagement()
-manager.change_email("Admin", "main@admin.org")
+# manager = UserManagement()
+# manager.change_email("Admin", "main@admin.org")
         
 
  

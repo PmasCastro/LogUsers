@@ -47,7 +47,6 @@ class LoginPage(ctk.CTkFrame):
             )
         self.remember.grid(row=4, column=0, columnspan=2, sticky="w", padx=50)                        
 
-
         self.button = ctk.CTkButton(self, text='Sign in', width=250, command=self.handle_login)
         self.button.grid(row=5, column=0, columnspan=2, pady=20)
 

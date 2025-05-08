@@ -23,7 +23,6 @@ class SignupPage(ctk.CTkFrame):
         self.username_entry = ctk.CTkEntry(self, placeholder_text="Username", width=250)
         self.username_entry.grid(row=2, column=0, columnspan=2, pady=8)
 
-
         self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*", width=250)
         self.user_pass.grid(row=3, column=0, columnspan=2, pady=8)
 
@@ -33,17 +32,33 @@ class SignupPage(ctk.CTkFrame):
         self.phone_entry = ctk.CTkEntry(self, placeholder_text="Phone number", width=250)
         self.phone_entry.grid(row=5, column=0, columnspan=2, pady=8)
 
-        self.button = ctk.CTkButton(self, text='Create Account', width=250, command=self.create_account)
+        self.button = ctk.CTkButton(self, text='Create Account', width=250, command=self.handle_user_registration)
         self.button.grid(row=6, column=0, columnspan=2, pady=(20))
 
-    def create_account(self):
+    def handle_user_registration(self):
+
         username = self.username_entry.get()
         password = self.user_pass.get()
         email = self.email_entry.get()
         phone = self.phone_entry.get()
+
+        if not username or not password or not email or not phone:
+            tkmb.showerror("Error", "All fields are required!")
+            return
+
+        user = User(username=username, password=password, email=email, phone=phone)
+
         
+
+        user.register_user()
+
+
         
-        User(username=username, password=password, email=email, phone=phone)
+
+        
+    
+        
+        # Check if the user was created successfully
         tkmb.showinfo("Success", "Account created successfully!")
 
         if self.app:
