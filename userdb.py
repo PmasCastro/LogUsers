@@ -59,8 +59,6 @@ class User:
         except sqlite3.OperationalError:
             print("Database error occurred. Please check the database connection.")
     
-             
-    
     @staticmethod 
     def del_user(username):
         conn = sqlite3.connect(DB_NAME)
