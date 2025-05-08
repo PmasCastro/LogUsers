@@ -19,7 +19,7 @@ class App(ctk.CTk):
     #Sets up the different pages' geometry
     def __init__(self):
         super().__init__()
-        self.geometry("600x500")
+        self.geometry("650x550")
         self.title("Login App")
 
         self.remember_var = ctk.BooleanVar(value=False)  
@@ -114,7 +114,7 @@ class App(ctk.CTk):
         pass
     
     def on_close(self):
-        print("Remember Me:", self.remember_var.get())  #For debugging purposes (returns the state of the checkbox)
+        # print("Remember Me:", self.remember_var.get())  #For debugging purposes (returns the state of the checkbox)
         #If the remember me checkbox is checked, it will log "Remember Me: True" in the console. Else, it will log "Remember Me: False".
 
         #Checks if the user is logged in and if the remember me checkbox is not checked.
