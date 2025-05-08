@@ -54,6 +54,9 @@ class SignupPage(ctk.CTkFrame):
         if not username or not password or not email or not phone:
             tkmb.showerror("Error", "All fields are required!")
             return
+        if len(phone) !=9:
+            tkmb.showerror("Error", "Phone number must be 9 digits long.")
+            return
 
         user = User(username=username, password=password, email=email, phone=phone)
 
@@ -61,7 +64,6 @@ class SignupPage(ctk.CTkFrame):
             if user.register_user():
                 tkmb.showinfo("Success", "Account created successfully!")
                 
- 
         except ValueError as e: 
             if 'username' in str(e):
                 tkmb.showerror("Error", "Username already exists.")
