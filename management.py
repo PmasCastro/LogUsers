@@ -153,7 +153,6 @@ class UserManagement:
                 raise ValueError("Phone number already assigned to a different account.")
             
             
-            
             cursor.execute(
                 "UPDATE users SET phone=? WHERE username=?", (new_phone, username))
             conn.commit()
@@ -164,12 +163,52 @@ class UserManagement:
 
         
 
-    def change_status():
-        pass
+    def change_status(self, username, make_admin: int):
+
+        try:
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+
+            if make_admin not in (0, 1):
+                raise ValueError("Invalid value for make_admin. Use 0 for regular user and 1 for admin.")
+
+            cursor.execute(
+                "SELECT isAdmin FROM users WHERE username=?", (username,))
+            
+            result = cursor.fetchone()
+
+            if result is None:
+                raise ValueError(f"User '{username}' does not exist.")
+            
+            current_status = result[0]
+
+            if make_admin == current_status:
+                raise ValueError(f"User '{username}' is already {'an admin' if make_admin == 1 else 'a regular user'}.")
+
+            if current_status != make_admin:
+                cursor.execute(
+                    "UPDATE users SET isAdmin=? WHERE username=?", (make_admin, username))
+                conn.commit()
+                if make_admin == 1:
+                    print(f"User '{username}' is now an admin.")
+                else:
+                    print(f"User '{username}' is no longer an admin.")
+                
+
+          
+
+
+          
+
+        finally:
+            conn.close()  
+
+                    
+        
 
 
         
 
-# mg = UserManagement()
+mg = UserManagement()
 
-# mg.change_email("Admin", "main@admin.com")
+mg.change_status("Pedro", 1)
