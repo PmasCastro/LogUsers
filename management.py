@@ -119,8 +119,39 @@ class UserManagement:
 
           
 
-    def change_phone():
-        pass
+    def change_phone(self, username, new_phone):
+
+        try:
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+
+            cursor.execute(
+                "SELECT phone FROM users WHERE username=?", (username,))
+            result = cursor.fetchone()
+
+            if result is None:
+                raise ValueError(f"User '{username}' does not exist.")
+            
+            current_phone = result[0]
+
+            if new_phone == current_phone:
+                raise ValueError("New phone number cannot be the same as the current phone number.")
+            if len(new_phone) != 9:
+                raise ValueError("Phone number must be 9 digits long.")
+
+            cursor.execute(
+                "SELECT 1 FROM users WHERE phone=?", (new_phone,))
+            if cursor.fetchone():
+                raise ValueError("Phone number already assigned to a different account.")
+            
+            cursor.execute(
+                "UPDATE users SET phone=? WHERE username=?", (new_phone, username))
+            conn.commit()
+        
+        finally:
+            conn.close()
+
+        
 
     def change_status():
         pass
