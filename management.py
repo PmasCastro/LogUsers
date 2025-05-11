@@ -79,7 +79,7 @@ class UserManagement:
             conn.close()
         
 
-    def change_email(self, username, old_email, new_email):
+    def change_email(self, username, new_email):
 
         try:
             conn = sqlite3.connect(DB_NAME)
@@ -125,6 +125,15 @@ class UserManagement:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
 
+            new_phone = new_phone.strip()
+
+            if not new_phone.isdigit():
+                raise ValueError("Phone number must contain only digits.")
+            
+            if len(new_phone) != 9:
+                raise ValueError("Phone number must be 9 digits long.")
+            
+
             cursor.execute(
                 "SELECT phone FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
@@ -136,13 +145,14 @@ class UserManagement:
 
             if new_phone == current_phone:
                 raise ValueError("New phone number cannot be the same as the current phone number.")
-            if len(new_phone) != 9:
-                raise ValueError("Phone number must be 9 digits long.")
+            
 
             cursor.execute(
                 "SELECT 1 FROM users WHERE phone=?", (new_phone,))
             if cursor.fetchone():
                 raise ValueError("Phone number already assigned to a different account.")
+            
+            
             
             cursor.execute(
                 "UPDATE users SET phone=? WHERE username=?", (new_phone, username))
@@ -161,4 +171,7 @@ class UserManagement:
 # manager.change_email("Admin", "main@admin.org")
         
 
- 
+mg = UserManagement()
+
+
+mg.change_phone("Admin", "987654342")
