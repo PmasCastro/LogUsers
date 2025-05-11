@@ -8,6 +8,7 @@ class UserManagement:
         pass
 
     def change_username(self, old_username, new_username):
+
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
@@ -85,35 +86,34 @@ class UserManagement:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
 
-            # Check if the username exists in the database
-            cursor.execute(
-                "SELECT username FROM users WHERE username=?", (username,))
-            result = cursor.fetchone()
+            if " " in new_email:
+                raise ValueError("Email cannot contain spaces.")
             
-            # Retrieve the old email from the database and returns it as old_email
+            if "@" not in new_email or "." not in new_email:
+                raise ValueError("Invalid email format.")
+            
             cursor.execute(
-                "SELECT email FROM users WHERE username=?", (old_email,))
-            old_email = cursor.fetchone()
+                "SELECT email FROM users WHERE username=?", (username,))
+            result = cursor.fetchone()
 
             if result is None:
-                print(f"User '{username}' does not exist.")
-                return
-            else:
-                if " " in new_email:
-                    print("Email cannot contain spaces.")
-                    return
-                if "@" not in new_email or "." not in new_email:
-                    print("Invalid email format.")
-                    return
-                # Check if the new_email is equal to the old_username
-                if new_email == old_email:
-                    print("New email cannot be the same as the current e-mail.")
-                    return
-                else:
-                    cursor.execute(
-                    "UPDATE users SET email=? WHERE username=?", (new_email, username))
-                    conn.commit()
-                    print(f"Email for user '{username}' changed successfully.")     
+                raise ValueError(f"User '{username}' does not exist.")
+            
+            current_email = result[0]
+
+            if new_email == current_email:
+                raise ValueError("New email cannot be the same as the current email.")
+            
+            cursor.execute(
+                "SELECT 1 FROM users WHERE email=?", (new_email,))
+            if cursor.fetchone():
+                raise ValueError("Email already assigned to a different account.")
+            
+            cursor.execute(
+                "UPDATE users SET email=? WHERE username=?", (new_email, username))
+            conn.commit()
+            print(f"Email for user '{username}' changed successfully to '{new_email}'.")
+           
         finally:
             conn.close()
 
@@ -157,6 +157,7 @@ class UserManagement:
             cursor.execute(
                 "UPDATE users SET phone=? WHERE username=?", (new_phone, username))
             conn.commit()
+            print(f"Phone number for user '{username}' changed successfully to '{new_phone}'.")
         
         finally:
             conn.close()
@@ -167,11 +168,8 @@ class UserManagement:
         pass
 
 
-# manager = UserManagement()
-# manager.change_email("Admin", "main@admin.org")
         
 
-mg = UserManagement()
+# mg = UserManagement()
 
-
-mg.change_phone("Admin", "987654342")
+# mg.change_email("Admin", "main@admin.com")
