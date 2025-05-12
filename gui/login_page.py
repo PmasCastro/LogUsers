@@ -58,10 +58,11 @@ class LoginPage(ctk.CTkFrame):
         self.forgot.bind("<Button-1>", lambda e: tkmb.showinfo("Reset", "Redirecting to password reset"))
 
 
-    def handle_login(self, is_admin=False):
+    def handle_login(self):
         # Check if the username and password fields are empty
         username = self.username_entry.get()
         password = self.user_pass.get()
+        
 
         try:
             if not username.strip() or not password.strip():
@@ -75,12 +76,16 @@ class LoginPage(ctk.CTkFrame):
         try:
 
             if auth.authenticate_user(username, password):
+
+                self.user_role = auth.get_user_role(username)
                 tkmb.showinfo("Success", "Login successful")
+
                 if self.remember_var.get():                    
                     
-                    # Store the username in a json file
+                    # Store the username, "remember me" status and role in a json file
                     with open("session.json", "w") as f:
-                        json.dump({"username": username, "remember_me": True}, f)
+                        json.dump({"username": username, "remember_me": True, "role": self.user_role}, f)
+
                 else:
                     if os.path.exists("session.json"):
                         os.remove("session.json")
@@ -90,16 +95,25 @@ class LoginPage(ctk.CTkFrame):
 
                 #Store the username in the app instance for later use
                 self.app.logged_in_username = username
-                self.app.load_user_page(username)
+                
+                #Check the user role and load the appropriate page
+                #The user role is set in the Authenticator class
+                if self.user_role == "admin":
+                    self.app.load_admin_page(username)
+                else:
+                    self.app.load_user_page(username)
 
         except ValueError as e: 
 
             if str(e) == "User does not exist.":
                 tkmb.showerror("Error", "User does not exist")
+
             elif str(e) == "Password is incorrect.":
                 tkmb.showerror("Error", "Password is incorrect")
+
             elif str(e) == "User is already logged in.":
                 tkmb.showerror("Error", "User is already logged in")
+
             return
 
         

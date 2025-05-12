@@ -9,7 +9,7 @@
 from gui.signup_page import SignupPage
 from gui.login_page import LoginPage
 from gui.user_main_page import UserMainPage
-from gui.admin_main_page import AdminMainPage
+# from gui.admin_main_page import AdminMainPage
 import customtkinter as ctk
 from auth import Authenticator 
 import os
@@ -94,6 +94,7 @@ class App(ctk.CTk):
 
         self.login_page.app = self
 
+
     def load_user_page(self, username):
 
         if self.current_page:
@@ -110,6 +111,7 @@ class App(ctk.CTk):
     def load_admin_page(self, username):
         pass
         
+
     def load_signup_page(self):
 
         if self.current_page:
@@ -126,11 +128,11 @@ class App(ctk.CTk):
         if self.current_page:
             self.current_page.destroy()
         
-        
     
     def load_user_settings(self):
         pass
     
+
     def on_close(self):
         # print("Remember Me:", self.remember_var.get())  #For debugging purposes (returns the state of the checkbox)
         #If the remember me checkbox is checked, it will log "Remember Me: True" in the console. Else, it will log "Remember Me: False".
@@ -141,6 +143,7 @@ class App(ctk.CTk):
             auth.logout_user(self.logged_in_username)
                 
         self.destroy()
+
 
     def run(self):
         self.protocol("WM_DELETE_WINDOW", self.on_close)  #Set close handler
