@@ -90,6 +90,6 @@ class Authenticator:
 # user_login.logout("Pedro")
 
 
-u = Authenticator()
+# u = Authenticator()
 
-u.get_user_role("Test")
+# u.logout_user("Admin")

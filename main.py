@@ -9,7 +9,7 @@
 from gui.signup_page import SignupPage
 from gui.login_page import LoginPage
 from gui.user_main_page import UserMainPage
-# from gui.admin_main_page import AdminMainPage
+from gui.admin_main_page import AdminMainPage
 import customtkinter as ctk
 from auth import Authenticator 
 import os
@@ -111,9 +111,16 @@ class App(ctk.CTk):
         self.user_page.app = self
     
 
-    def load_admin_page(self, username):
-        pass
+    def load_admin_page(self, username, user_role):
+
+        if self.current_page:
+            self.current_page.destroy()
         
+        self.admin_page = AdminMainPage(master=self.background_frame, username=username, user_role=user_role)
+        self.current_page = self.admin_page
+
+        self.admin_page.app = self
+       
 
     def load_signup_page(self):
 
@@ -149,6 +156,7 @@ class App(ctk.CTk):
 
 
     def run(self):
+        
         self.protocol("WM_DELETE_WINDOW", self.on_close)  #Set close handler
         self.mainloop()
 
