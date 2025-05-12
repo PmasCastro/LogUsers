@@ -99,7 +99,7 @@ class LoginPage(ctk.CTkFrame):
                 #Check the user role and load the appropriate page
                 #The user role is set in the Authenticator class
                 if self.user_role == "admin":
-                    self.app.load_admin_page(username)
+                    self.app.load_admin_page(username)      
                 else:
                     self.app.load_user_page(username)
 

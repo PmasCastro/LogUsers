@@ -23,12 +23,12 @@ class App(ctk.CTk):
         super().__init__()
         self.geometry("650x550")
         self.title("Login App")
-
+        
+        #Initialize state variables
         self.remember_var = ctk.BooleanVar(value=False)  
-
         self.logged_in_username = None
         self.user_role = None
-
+        
         # Configure grid for the main window
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -39,36 +39,40 @@ class App(ctk.CTk):
         self.background_frame.grid_rowconfigure(0, weight=1)
         self.background_frame.grid_columnconfigure(0, weight=1)
         
-        #Keeps track of the current page
+        #Initialize current page tracking
         self.current_page = None 
         
-        #Loads the login page on app start
-        self.load_login_page()
+        self.load_session()
+
+        if not self.logged_in_username:
+            #If the user is not logged in, load the login page
+            self.load_login_page()
         
-        self.login_page.app = self
-        
+    def load_session(self):
+
         session_file = "session.json"
 
         if os.path.exists(session_file):
-
             with open(session_file, "r") as f:
                 session_data = json.load(f)
 
                 if session_data.get("remember_me"):
-                    username = session_data.get("username")
 
+                    username = session_data.get("username")
+                    role = session_data.get("role")
                     #Set the remember_var to True if the checkbox was checked
                     #This ensures that the checkbox state is consistent if the user never loggs out and closes the app.
-                    self.remember_var.set(True)  
-
-                    # auth = Authenticator()
-                    # auth.login(username)
-
+                    self.remember_var.set(True)
                     self.logged_in_username = username
+                    self.user_role = role
 
-                    self.load_user_page(username)
+                    if self.user_role == "user":
+                        self.load_user_page(username)
+                    else:
+                        self.load_user_page(username)
+                    
 
-        
+
     def remember_checked(self):
 
         #Access the remember_var passed from the LoginPage instance
