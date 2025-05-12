@@ -161,8 +161,6 @@ class UserManagement:
         finally:
             conn.close()
 
-        
-
     def change_status(self, username, make_admin: int):
 
         try:
@@ -193,12 +191,6 @@ class UserManagement:
                     print(f"User '{username}' is now an admin.")
                 else:
                     print(f"User '{username}' is no longer an admin.")
-                
-
-          
-
-
-          
 
         finally:
             conn.close()  

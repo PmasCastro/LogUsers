@@ -8,6 +8,8 @@ ctk.set_appearance_mode("light")  # Or 'dark' for dark mode
 ctk.set_default_color_theme("blue")
 
 class LoginPage(ctk.CTkFrame):
+
+
     def __init__(self, master=None, app=None):
         super().__init__(master)
         self.app = app
@@ -22,6 +24,7 @@ class LoginPage(ctk.CTkFrame):
         #Without this, the checkbox will not be able to store its state.
         self.remember_var = ctk.BooleanVar()
         self.create_widgets()
+
 
     def create_widgets(self):
         self.label = ctk.CTkLabel(self, text="Sign in to your account", font=ctk.CTkFont(size=18, weight="bold"))
@@ -54,7 +57,8 @@ class LoginPage(ctk.CTkFrame):
         self.forgot.grid(row=6, column=0, columnspan=2, padx=8)
         self.forgot.bind("<Button-1>", lambda e: tkmb.showinfo("Reset", "Redirecting to password reset"))
 
-    def handle_login(self):
+
+    def handle_login(self, is_admin=False):
         # Check if the username and password fields are empty
         username = self.username_entry.get()
         password = self.user_pass.get()
@@ -69,6 +73,7 @@ class LoginPage(ctk.CTkFrame):
         auth = Authenticator()
 
         try:
+
             if auth.authenticate_user(username, password):
                 tkmb.showinfo("Success", "Login successful")
                 if self.remember_var.get():                    
@@ -85,9 +90,10 @@ class LoginPage(ctk.CTkFrame):
 
                 #Store the username in the app instance for later use
                 self.app.logged_in_username = username
-                self.app.load_main_page(username)
+                self.app.load_user_page(username)
 
         except ValueError as e: 
+
             if str(e) == "User does not exist.":
                 tkmb.showerror("Error", "User does not exist")
             elif str(e) == "Password is incorrect.":

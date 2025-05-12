@@ -8,7 +8,8 @@
 
 from gui.signup_page import SignupPage
 from gui.login_page import LoginPage
-from gui.main_page import MainPage
+from gui.user_main_page import UserMainPage
+from gui.admin_main_page import AdminMainPage
 import customtkinter as ctk
 from auth import Authenticator 
 import os
@@ -18,6 +19,7 @@ class App(ctk.CTk):
 
     #Sets up the different pages' geometry
     def __init__(self):
+
         super().__init__()
         self.geometry("650x550")
         self.title("Login App")
@@ -25,6 +27,7 @@ class App(ctk.CTk):
         self.remember_var = ctk.BooleanVar(value=False)  
 
         self.logged_in_username = None
+        self.user_role = None
 
         # Configure grid for the main window
         self.grid_rowconfigure(0, weight=1)
@@ -45,9 +48,12 @@ class App(ctk.CTk):
         self.login_page.app = self
         
         session_file = "session.json"
+
         if os.path.exists(session_file):
+
             with open(session_file, "r") as f:
                 session_data = json.load(f)
+
                 if session_data.get("remember_me"):
                     username = session_data.get("username")
 
@@ -59,8 +65,10 @@ class App(ctk.CTk):
                     # auth.login(username)
 
                     self.logged_in_username = username
-                    self.load_main_page(username)
-    
+
+                    self.load_user_page(username)
+
+        
     def remember_checked(self):
 
         #Access the remember_var passed from the LoginPage instance
@@ -86,18 +94,24 @@ class App(ctk.CTk):
 
         self.login_page.app = self
 
-    def load_main_page(self, username):
+    def load_user_page(self, username):
+
         if self.current_page:
             self.current_page.destroy()
 
             #This method creates an instance of the MainPage class and sets its master to the background frame.
             #It also passes the username from LoginPage to the MainPage instance.
-        self.main_page = MainPage(master=self.background_frame, username=username)
+        self.main_page = UserMainPage(master=self.background_frame, username=username)
         self.current_page = self.main_page
 
         self.main_page.app = self
+    
+
+    def load_admin_page(self, username):
+        pass
         
     def load_signup_page(self):
+
         if self.current_page:
             self.current_page.destroy()
         
@@ -107,8 +121,12 @@ class App(ctk.CTk):
         self.signup_page.app = self
 
     
-    def load_forgot_password_page(self):
-        pass
+    def load_recover_password_page(self):
+        
+        if self.current_page:
+            self.current_page.destroy()
+        
+        
     
     def load_user_settings(self):
         pass

@@ -10,6 +10,7 @@ def limit_phone_input(input_str, current_value):
 
 
 class SignupPage(ctk.CTkFrame):
+    
     def __init__(self, master=None, app=None):
         super().__init__(master)
         self.app = app

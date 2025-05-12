@@ -7,9 +7,11 @@ DB_NAME="users.db"
 class Authenticator:
 
     def __init__(self):
+
         pass
         
     def authenticate_user(self, username, password):
+
         try:
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
@@ -39,7 +41,9 @@ class Authenticator:
         finally:
             conn.close()
 
+
     def logout_user(self, username):
+
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM users WHERE username=?", (username,))
@@ -55,7 +59,25 @@ class Authenticator:
             conn.commit()
             conn.close()
     
-    
+
+    def get_user_role(self, username):
+
+        try:
+            
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT isAdmin FROM users WHERE username=?", (username,))
+                result = cursor.fetchone()
+                
+                if result is None:
+                    raise ValueError("User does not exist.")
+
+                is_admin = result[0]
+                return "admin" if is_admin == 1 else "user"
+              
+        finally:
+            conn.close()
+          
 
 
     
@@ -68,4 +90,6 @@ class Authenticator:
 # user_login.logout("Pedro")
 
 
+u = Authenticator()
 
+u.get_user_role("Test")
