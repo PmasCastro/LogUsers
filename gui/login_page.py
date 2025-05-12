@@ -65,8 +65,10 @@ class LoginPage(ctk.CTkFrame):
         
 
         try:
+
             if not username.strip() or not password.strip():
                 raise ValueError("Please fill in all fields")
+            
         except ValueError as e:
             tkmb.showerror("Error", str(e))
             return
@@ -95,13 +97,14 @@ class LoginPage(ctk.CTkFrame):
 
                 #Store the username in the app instance for later use
                 self.app.logged_in_username = username
+                self.app.user_role = self.user_role
                 
                 #Check the user role and load the appropriate page
                 #The user role is set in the Authenticator class
                 if self.user_role == "admin":
-                    self.app.load_admin_page(username)      
+                    self.app.load_admin_page(username, self.user_role)      
                 else:
-                    self.app.load_user_page(username)
+                    self.app.load_user_page(username, self.user_role)
 
         except ValueError as e: 
 

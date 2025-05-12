@@ -59,18 +59,17 @@ class App(ctk.CTk):
                 if session_data.get("remember_me"):
 
                     username = session_data.get("username")
-                    role = session_data.get("role")
+                    user_role = session_data.get("role")
                     #Set the remember_var to True if the checkbox was checked
                     #This ensures that the checkbox state is consistent if the user never loggs out and closes the app.
                     self.remember_var.set(True)
                     self.logged_in_username = username
-                    self.user_role = role
+                    self.user_role = user_role
 
-                    if self.user_role == "user":
-                        self.load_user_page(username)
+                    if self.user_role == "admin":
+                        self.load_admin_page(username, user_role)
                     else:
-                        self.load_user_page(username)
-                    
+                        self.load_user_page(username, user_role)
 
 
     def remember_checked(self):
@@ -99,17 +98,17 @@ class App(ctk.CTk):
         self.login_page.app = self
 
 
-    def load_user_page(self, username):
+    def load_user_page(self, username, user_role):
 
         if self.current_page:
             self.current_page.destroy()
 
             #This method creates an instance of the MainPage class and sets its master to the background frame.
             #It also passes the username from LoginPage to the MainPage instance.
-        self.main_page = UserMainPage(master=self.background_frame, username=username)
-        self.current_page = self.main_page
+        self.user_page = UserMainPage(master=self.background_frame, username=username, user_role=user_role)
+        self.current_page = self.user_page
 
-        self.main_page.app = self
+        self.user_page.app = self
     
 
     def load_admin_page(self, username):
