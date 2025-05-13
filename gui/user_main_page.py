@@ -35,6 +35,8 @@ class UserMainPage(ctk.CTkFrame):
         self.button = ctk.CTkButton(self, text='Logout', width=250, command=self.handle_logout)
         self.button.grid(row=2, column=0, columnspan=2, pady=20)
 
+    
+
 
     def handle_logout(self):
 
