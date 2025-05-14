@@ -34,7 +34,7 @@ class App(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)
 
         # Outer frame with background color
-        self.background_frame = ctk.CTkFrame(self, fg_color="#4C5B61")  #4C5B61
+        self.background_frame = ctk.CTkFrame(self, fg_color="#1e1e1e", corner_radius=0)  #4C5B61
         self.background_frame.grid(row=0, column=0, sticky="nsew")
         self.background_frame.grid_rowconfigure(0, weight=1)
         self.background_frame.grid_columnconfigure(0, weight=1)

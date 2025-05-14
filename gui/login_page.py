@@ -13,7 +13,7 @@ class LoginPage(ctk.CTkFrame):
     def __init__(self, master=None, app=None):
         super().__init__(master)
         self.app = app
-        self.configure(width=350, height=400, corner_radius=15, fg_color="#829191")
+        self.configure(width=350, height=400, corner_radius=15, fg_color="#3e3e42")
         self.grid_propagate(False)
         self.grid(row=0, column=0)
         self.columnconfigure((0, 1), weight=1)
@@ -27,10 +27,10 @@ class LoginPage(ctk.CTkFrame):
 
 
     def create_widgets(self):
-        self.label = ctk.CTkLabel(self, text="Sign in to your account", font=ctk.CTkFont(size=18, weight="bold"))
+        self.label = ctk.CTkLabel(self, text="Sign in to your account", text_color="#e6e6e6", font=ctk.CTkFont(size=18, weight="bold"))
         self.label.grid(row=0, column=0, columnspan=2, pady=(20, 5))
 
-        self.signup_label = ctk.CTkLabel(self, text="or create account", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
+        self.signup_label = ctk.CTkLabel(self, text="or create account", text_color="#e6e6e6", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
         self.signup_label.grid(row=1, column=0, columnspan=2, pady=(0, 20))
         self.signup_label.bind("<Button-1>", lambda e: self.app.load_signup_page())
 
@@ -43,17 +43,19 @@ class LoginPage(ctk.CTkFrame):
         self.remember = ctk.CTkCheckBox(
             self,
             text="Remember me",
+            text_color="#e6e6e6",
             variable=self.remember_var,
+            checkmark_color="#e6e6e6",
             font=ctk.CTkFont(size=12),              
             checkbox_height=16,                     
             checkbox_width=16
             )
         self.remember.grid(row=4, column=0, columnspan=2, sticky="w", padx=50)                        
 
-        self.button = ctk.CTkButton(self, text='Sign in', width=250, command=self.handle_login)
+        self.button = ctk.CTkButton(self, text='Sign in', fg_color="#007acc", width=250, command=self.handle_login)
         self.button.grid(row=5, column=0, columnspan=2, pady=20)
 
-        self.forgot = ctk.CTkLabel(self, text="Forgot your password?", text_color="blue", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
+        self.forgot = ctk.CTkLabel(self, text="Forgot your password?", text_color="#e6e6e6", cursor="hand2", font=ctk.CTkFont(size=12, underline=True))
         self.forgot.grid(row=6, column=0, columnspan=2, padx=8)
         self.forgot.bind("<Button-1>", lambda e: tkmb.showinfo("Reset", "Redirecting to password reset"))
 

@@ -9,7 +9,7 @@ class AdminMainPage(ctk.CTkFrame):
         self.username = username
         self.user_role = user_role
 
-        self.configure(fg_color="#829191")
+        self.configure(fg_color="#1e1e1e")
         self.grid(row=0, column=0, sticky="nsew")
 
         # Grid layout for AdminMainPage
@@ -21,7 +21,7 @@ class AdminMainPage(ctk.CTkFrame):
 
     def create_widgets(self):
         # === NAVBAR ===
-        self.navbar = ctk.CTkFrame(self, fg_color="#317AC1", height=100, corner_radius=0)
+        self.navbar = ctk.CTkFrame(self, fg_color="#3e3e42", height=200, corner_radius=0)
         self.navbar.grid(row=0, column=0, sticky="ew")  # full width
         self.navbar.grid_columnconfigure((0,1,2,3), weight=1)  # evenly distribute buttons
 
@@ -32,7 +32,7 @@ class AdminMainPage(ctk.CTkFrame):
 
         # === CONTENT AREA ===
         self.content_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=20)
-        self.content_frame.grid(row=1, column=0, sticky="nsew", padx=20, pady=20)
+        self.content_frame.grid(row=1, column=0, sticky="nsew", padx=60, pady=60) #with padx and pady you can resize the content area size
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
 
