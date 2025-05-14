@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from CTkTable import *
 from auth import Authenticator
 import os
 
@@ -35,8 +36,14 @@ class AdminMainPage(ctk.CTkFrame):
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
 
-        placeholder = ctk.CTkLabel(self.content_frame, text="Table Placeholder", text_color="black")
-        placeholder.grid(row=0, column=0)
+        value = [[1,2,3,4,5],
+                 [1,2,3,4,5],
+                 [1,2,3,4,5],
+                 [1,2,3,4,5],
+                 [1,2,3,4,5]]
+
+        table = CTkTable(self.content_frame, row=5, column=5, values=value)
+        table.pack(expand=False, fill="both", padx=30, pady=30)
 
     def handle_logout(self):
         if self.username:
