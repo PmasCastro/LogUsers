@@ -27,6 +27,7 @@ class User:
         if not User.is_valid_email(self.email):
             print("Invalid email format.")
             return
+        
         if not User.is_valid_phone(self.phone):
             print("Invalid phone number format.")
             return
@@ -47,12 +48,16 @@ class User:
                 print(f"User '{self.username}' created successfully.")
 
         except sqlite3.IntegrityError as e:
+            
             if 'username' in str(e):
                 raise ValueError("Username already exists.")
+            
             elif 'email' in str(e):
                 raise ValueError("Email already assigned to a different account.")
+            
             elif 'phone' in str(e):
                 raise ValueError("Phone number already assigned to a different account.")
+            
             else:
                 raise ValueError(f"An error occurred: {e}")    
             

@@ -1,7 +1,10 @@
 import customtkinter as ctk
 from CTkTable import *
 from auth import Authenticator
+import sqlite3
 import os
+
+DB_NAME = "users.db"
 
 class AdminMainPage(ctk.CTkFrame):
     def __init__(self, master=None, username=None, user_role=None):
@@ -36,13 +39,21 @@ class AdminMainPage(ctk.CTkFrame):
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
 
-        value = [[1,2,3,4,5],
-                 [1,2,3,4,5],
-                 [1,2,3,4,5],
-                 [1,2,3,4,5],
-                 [1,2,3,4,5]]
+        # === Users table ===
 
-        table = CTkTable(self.content_frame, row=5, column=5, values=value)
+        try:
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+
+                cursor.execute("SELECT * FROM users")
+                rows = cursor.fetchall()
+
+
+        except sqlite3.OperationalError:
+            print("Database error occurred. Please check the database connection")
+          
+
+        table = CTkTable(self.content_frame, row=5, column=5, values=rows)
         table.pack(expand=False, fill="both", padx=30, pady=30)
 
     def handle_logout(self):
