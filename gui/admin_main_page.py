@@ -45,15 +45,18 @@ class AdminMainPage(ctk.CTkFrame):
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
 
-                cursor.execute("SELECT * FROM users")
+                cursor.execute("SELECT id, username, email, phone, isOnline, isAdmin FROM users")
+
                 rows = cursor.fetchall()
 
+                headers = ["User ID", "Username", "Email", "Phone Number", "Online", "Role"]
+
+                data = [headers] + rows
 
         except sqlite3.OperationalError:
             print("Database error occurred. Please check the database connection")
           
-
-        table = CTkTable(self.content_frame, row=5, column=5, values=rows)
+        table = CTkTable(self.content_frame, row=5, column=5, values=data)
         table.pack(expand=False, fill="both", padx=30, pady=30)
 
     def handle_logout(self):
