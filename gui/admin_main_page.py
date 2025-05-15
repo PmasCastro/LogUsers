@@ -31,7 +31,7 @@ class AdminMainPage(ctk.CTkFrame):
         ctk.CTkButton(self.navbar, text="Logout", command=self.handle_logout).grid(row=0, column=3, padx=10, pady=5)
 
         # === CONTENT AREA ===
-        self.content_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=20)
+        self.content_frame = ctk.CTkFrame(self, fg_color="#3e3e42", corner_radius=20)
         self.content_frame.grid(row=1, column=0, sticky="nsew", padx=60, pady=60) #with padx and pady you can resize the content area size
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
