@@ -7,6 +7,7 @@ import os
 DB_NAME = "users.db"
 
 class AdminMainPage(ctk.CTkFrame):
+
     def __init__(self, master=None, username=None, user_role=None):
         super().__init__(master)
         self.username = username
@@ -21,6 +22,7 @@ class AdminMainPage(ctk.CTkFrame):
 
         self.create_widgets()
         self.show_dashboard()
+
 
     def create_widgets(self):
         # === NAVBAR ===
@@ -39,23 +41,44 @@ class AdminMainPage(ctk.CTkFrame):
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
 
+
     def clear_content_frame(self):
         for widget in self.content_frame.winfo_children():
             widget.destroy()
 
+
     def show_dashboard(self):
         self.clear_content_frame()
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
-        label = ctk.CTkLabel(frame, text="Dashboard View", font=("Arial", 20))
-        label.pack(pady=20)
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+
+        label = ctk.CTkLabel(frame, text="Dashboard View", font=("Arial", 20), text_color="white")
+        label.pack(pady=20)
+        try:
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT id, username, email, phone, isOnline, isAdmin FROM users")
+                rows = cursor.fetchall()
+                headers = ["User ID", "Username", "Email", "Phone Number", "Online", "Role"]
+                data = [headers] + rows
+            
+        except sqlite3.OperationalError:
+            print("Database error occurred. Please check the database connection")
+            data = [["Error loading data"]]
+        
+        table = CTkTable(frame, values=data)  # Removed invalid row=5, column=5
+        table.pack(expand=True, fill="both", padx=60, pady=60)
+
+        #  === Users table ===
+
 
     def show_settings(self):
         self.clear_content_frame()
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
-        label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20))
+        label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="White")
         label.pack(pady=20)
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+
 
     def show_users(self):
         self.clear_content_frame()
@@ -96,6 +119,7 @@ class AdminMainPage(ctk.CTkFrame):
                 )
                 logout_button.grid(row=row_index, column=len(user), padx=10, pady=5)
 
+
     def handle_logout(self):
         if self.username:
             auth = Authenticator()
@@ -106,6 +130,7 @@ class AdminMainPage(ctk.CTkFrame):
 
             if self.app:
                 self.app.load_login_page()
+
 
     def force_logout_user(self, username):
         auth = Authenticator()
