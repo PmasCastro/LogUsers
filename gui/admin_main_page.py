@@ -41,23 +41,75 @@ class AdminMainPage(ctk.CTkFrame):
 
         # === Users table ===
 
+        
+
+        # try:
+        #     with sqlite3.connect(DB_NAME) as conn:
+        #         cursor = conn.cursor()
+
+        #         cursor.execute("SELECT id, username, email, phone, isOnline, isAdmin FROM users")
+
+        #         rows = cursor.fetchall()
+
+        #         headers = ["User ID", "Username", "Email", "Phone Number", "Online", "Role"]
+
+        #         data = [headers] + rows
+
+        # except sqlite3.OperationalError:
+        #     print("Database error occurred. Please check the database connection")
+          
+        # table = CTkTable(self.content_frame, row=5, column=5, values=data)
+        # table.pack(expand=False, fill="both", padx=30, pady=30)
+
+
+         # === Users table ===
+
+
+
+         # === Users_board ===
+
         try:
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
-
                 cursor.execute("SELECT id, username, email, phone, isOnline, isAdmin FROM users")
-
                 rows = cursor.fetchall()
-
-                headers = ["User ID", "Username", "Email", "Phone Number", "Online", "Role"]
-
-                data = [headers] + rows
-
         except sqlite3.OperationalError:
             print("Database error occurred. Please check the database connection")
-          
-        table = CTkTable(self.content_frame, row=5, column=5, values=data)
-        table.pack(expand=False, fill="both", padx=30, pady=30)
+            rows = []
+
+        headers = ["User ID", "Username", "Email", "Phone", "Online", "Role", "Action"]
+        
+        scroll_frame = ctk.CTkScrollableFrame(self.content_frame)
+        scroll_frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+
+        # Create header
+        for col_index, header in enumerate(headers):
+            label = ctk.CTkLabel(scroll_frame, text=header, font=("Arial", 14, "bold"))
+            label.grid(row=0, column=col_index, padx=10, pady=5)
+
+        # Create user rows
+        for row_index, user in enumerate(rows, start=1):
+            for col_index, item in enumerate(user):
+                label = ctk.CTkLabel(scroll_frame, text=str(item), font=("Arial", 12))
+                label.grid(row=row_index, column=col_index, padx=10, pady=5)
+
+            # Add "Log Out" button if user is online
+            is_online = user[4]  # isOnline field
+            username = user[1]
+
+            if is_online:
+                logout_button = ctk.CTkButton(
+                    scroll_frame,
+                    text="Log Out",
+                    width=80,
+                    command=lambda u=username: self.force_logout_user(u)
+                )
+                logout_button.grid(row=row_index, column=len(user), padx=10, pady=5)
+
+
+        # === Users_board ===            
+
+    
 
     def handle_logout(self):
         if self.username:
@@ -69,3 +121,22 @@ class AdminMainPage(ctk.CTkFrame):
 
             if self.app:
                 self.app.load_login_page()
+    
+    def force_logout_user(self, username):
+        auth = Authenticator()
+        auth.logout_user(username)
+
+        with sqlite3.connect(DB_NAME) as conn:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE users SET isOnline = 0 WHERE username = ?", (username,))
+            conn.commit()
+
+        self.refresh_page()
+
+
+    def refresh_page(self):
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
+        self.create_widgets()
+
+    
