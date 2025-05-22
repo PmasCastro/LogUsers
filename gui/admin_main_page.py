@@ -15,86 +15,76 @@ class AdminMainPage(ctk.CTkFrame):
         self.configure(fg_color="#1e1e1e")
         self.grid(row=0, column=0, sticky="nsew")
 
-        # Grid layout for AdminMainPage
-        self.grid_rowconfigure(0, weight=0)  # Navbar row (fixed height)
-        self.grid_rowconfigure(1, weight=1)  # Content row (expandable)
+        self.grid_rowconfigure(0, weight=0)  # Navbar
+        self.grid_rowconfigure(1, weight=1)  # Content
         self.grid_columnconfigure(0, weight=1)
 
         self.create_widgets()
+        self.show_dashboard()
 
     def create_widgets(self):
         # === NAVBAR ===
-        self.navbar = ctk.CTkFrame(self, fg_color="#3e3e42", height=200, corner_radius=0)
-        self.navbar.grid(row=0, column=0, sticky="ew")  # full width
-        self.navbar.grid_columnconfigure((0,1,2,3), weight=1)  # evenly distribute buttons
+        self.navbar = ctk.CTkFrame(self, fg_color="#3e3e42", height=60, corner_radius=0)
+        self.navbar.grid(row=0, column=0, sticky="ew")
+        self.navbar.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
-        ctk.CTkButton(self.navbar, text="Dashboard").grid(row=0, column=0, padx=10, pady=5)
-        ctk.CTkButton(self.navbar, text="Users").grid(row=0, column=1, padx=10, pady=5)
-        ctk.CTkButton(self.navbar, text="Settings").grid(row=0, column=2, padx=10, pady=5)
-        ctk.CTkButton(self.navbar, text="Logout", command=self.handle_logout).grid(row=0, column=3, padx=10, pady=5)
+        ctk.CTkButton(self.navbar, text="Dashboard", command=self.show_dashboard).grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkButton(self.navbar, text="Users", command=self.show_users).grid(row=0, column=1, padx=10, pady=10)
+        ctk.CTkButton(self.navbar, text="Settings", command=self.show_settings).grid(row=0, column=2, padx=10, pady=10)
+        ctk.CTkButton(self.navbar, text="Logout", command=self.handle_logout).grid(row=0, column=3, padx=10, pady=10)
 
         # === CONTENT AREA ===
-        self.content_frame = ctk.CTkFrame(self, fg_color="#3e3e42", corner_radius=20)
-        self.content_frame.grid(row=1, column=0, sticky="nsew", padx=60, pady=60) #with padx and pady you can resize the content area size
+        self.content_frame = ctk.CTkFrame(self, fg_color="#1e1e1e", corner_radius=20)
+        self.content_frame.grid(row=1, column=0, sticky="nsew", padx=40, pady=40)
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
 
-        # === Users table ===
+    def clear_content_frame(self):
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
 
-        
+    def show_dashboard(self):
+        self.clear_content_frame()
+        frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
+        label = ctk.CTkLabel(frame, text="Dashboard View", font=("Arial", 20))
+        label.pack(pady=20)
+        frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
-        # try:
-        #     with sqlite3.connect(DB_NAME) as conn:
-        #         cursor = conn.cursor()
+    def show_settings(self):
+        self.clear_content_frame()
+        frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
+        label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20))
+        label.pack(pady=20)
+        frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
-        #         cursor.execute("SELECT id, username, email, phone, isOnline, isAdmin FROM users")
-
-        #         rows = cursor.fetchall()
-
-        #         headers = ["User ID", "Username", "Email", "Phone Number", "Online", "Role"]
-
-        #         data = [headers] + rows
-
-        # except sqlite3.OperationalError:
-        #     print("Database error occurred. Please check the database connection")
-          
-        # table = CTkTable(self.content_frame, row=5, column=5, values=data)
-        # table.pack(expand=False, fill="both", padx=30, pady=30)
-
-
-         # === Users table ===
-
-
-
-         # === Users_board ===
-
+    def show_users(self):
+        self.clear_content_frame()
         try:
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
                 cursor.execute("SELECT id, username, email, phone, isOnline, isAdmin FROM users")
                 rows = cursor.fetchall()
         except sqlite3.OperationalError:
-            print("Database error occurred. Please check the database connection")
+            print("Database error occurred.")
             rows = []
 
         headers = ["User ID", "Username", "Email", "Phone", "Online", "Role", "Action"]
-        
-        scroll_frame = ctk.CTkScrollableFrame(self.content_frame)
+
+        scroll_frame = ctk.CTkScrollableFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         scroll_frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
-        # Create header
+        # Header
         for col_index, header in enumerate(headers):
-            label = ctk.CTkLabel(scroll_frame, text=header, font=("Arial", 14, "bold"))
+            label = ctk.CTkLabel(scroll_frame, text=header, font=("Arial", 18, "bold"), text_color="white")
             label.grid(row=0, column=col_index, padx=10, pady=5)
 
-        # Create user rows
+        # Data rows
         for row_index, user in enumerate(rows, start=1):
             for col_index, item in enumerate(user):
-                label = ctk.CTkLabel(scroll_frame, text=str(item), font=("Arial", 12))
+                label = ctk.CTkLabel(scroll_frame, text=str(item), font=("Arial", 14), text_color="white")
                 label.grid(row=row_index, column=col_index, padx=10, pady=5)
 
-            # Add "Log Out" button if user is online
-            is_online = user[4]  # isOnline field
+            is_online = user[4]
             username = user[1]
 
             if is_online:
@@ -106,11 +96,6 @@ class AdminMainPage(ctk.CTkFrame):
                 )
                 logout_button.grid(row=row_index, column=len(user), padx=10, pady=5)
 
-
-        # === Users_board ===            
-
-    
-
     def handle_logout(self):
         if self.username:
             auth = Authenticator()
@@ -121,7 +106,7 @@ class AdminMainPage(ctk.CTkFrame):
 
             if self.app:
                 self.app.load_login_page()
-    
+
     def force_logout_user(self, username):
         auth = Authenticator()
         auth.logout_user(username)
@@ -131,12 +116,4 @@ class AdminMainPage(ctk.CTkFrame):
             cursor.execute("UPDATE users SET isOnline = 0 WHERE username = ?", (username,))
             conn.commit()
 
-        self.refresh_page()
-
-
-    def refresh_page(self):
-        for widget in self.content_frame.winfo_children():
-            widget.destroy()
-        self.create_widgets()
-
-    
+        self.show_users()

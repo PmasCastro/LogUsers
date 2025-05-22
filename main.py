@@ -1,7 +1,6 @@
 # This is the main entry point for the application. It initializes the GUI and starts the main loop.
 # It also handles the flow of the app, including managing the flow between different pages.
 
-
 #Data flow management: Now the App and LoginPage share the remember_var
 #allowing the app to properly handle user session persistence
 #(e.g., saving/loading the "Remember me" state in session.json).
@@ -11,7 +10,7 @@ from gui.login_page import LoginPage
 from gui.user_main_page import UserMainPage
 from gui.admin_main_page import AdminMainPage
 import customtkinter as ctk
-from auth import Authenticator 
+from auth import Authenticator
 import os
 import json
 
@@ -34,7 +33,7 @@ class App(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)
 
         # Outer frame with background color
-        self.background_frame = ctk.CTkFrame(self, fg_color="#1e1e1e", corner_radius=0)  #4C5B61
+        self.background_frame = ctk.CTkFrame(self, fg_color="#1e1e1e", corner_radius=0) 
         self.background_frame.grid(row=0, column=0, sticky="nsew")
         self.background_frame.grid_rowconfigure(0, weight=1)
         self.background_frame.grid_columnconfigure(0, weight=1)
@@ -53,6 +52,7 @@ class App(ctk.CTk):
         session_file = "session.json"
 
         if os.path.exists(session_file):
+
             with open(session_file, "r") as f:
                 session_data = json.load(f)
 
