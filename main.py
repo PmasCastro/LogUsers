@@ -20,7 +20,7 @@ class App(ctk.CTk):
     def __init__(self):
 
         super().__init__()
-        self.geometry("650x550")
+        self.geometry("1200x850")
         self.title("Login App")
         
         #Initialize state variables

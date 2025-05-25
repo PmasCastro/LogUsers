@@ -48,12 +48,15 @@ class AdminMainPage(ctk.CTkFrame):
 
 
     def show_dashboard(self):
+
         self.clear_content_frame()
+
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
         label = ctk.CTkLabel(frame, text="Dashboard View", font=("Arial", 20), text_color="white")
         label.pack(pady=20)
+
         try:
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
@@ -67,7 +70,13 @@ class AdminMainPage(ctk.CTkFrame):
             data = [["Error loading data"]]
         
         table = CTkTable(frame, values=data)  # Removed invalid row=5, column=5
-        table.pack(expand=True, fill="both", padx=60, pady=60)
+        table.pack(expand=True, fill="both", padx=80, pady=80)
+
+        bold_font = ctk.CTkFont(family="Arial", size=14, weight="bold")
+        
+        for col_index in range(len(data[0])):
+            table.frame[(0, col_index)].configure(font=bold_font)
+
 
         #  === Users table ===
 
