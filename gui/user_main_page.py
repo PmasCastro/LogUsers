@@ -84,8 +84,24 @@ class UserMainPage(ctk.CTkFrame):
                     except ValueError:
                         pass
 
-                label = ctk.CTkLabel(scroll_frame, text=str(item), font=("Arial", 14), text_color="white")
-                label.grid(row=row_index, column=col_index, padx=10, pady=5)
+                label = ctk.CTkLabel(
+                    scroll_frame,
+                    text=str(item),
+                    font=("Arial", 14),
+                    text_color="white",
+                    width=150,
+                    )
+                
+                if col_index == 0:
+                    label._label.configure(anchor="w")  # Left-align Username
+                elif col_index == 1:
+                    label._label.configure(anchor="center")  # Center-align User ID
+                elif col_index == 2:
+                    label._label.configure(anchor="w")  # Center-align Event
+                elif col_index == 3:
+                    label._label.configure(anchor="e")  # Right-align Timestamp
+
+                label.grid(row=row_index, column=col_index, padx=30, pady=5)
 
     def show_settings(self):
         self.clear_content_frame()
@@ -95,13 +111,15 @@ class UserMainPage(ctk.CTkFrame):
         label.pack(pady=20)
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
+
     def handle_logout(self):
         if self.username:
+            
             auth = Authenticator()
             auth.logout_user(self.username)
 
             if os.path.exists("session.json"):
                 os.remove("session.json")
 
-            if hasattr(self.master, "show_login_screen"):
-                self.master.show_login_screen()
+            if self.app:
+                self.app.load_login_page()
