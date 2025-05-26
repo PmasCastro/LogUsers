@@ -57,7 +57,7 @@ class SignupPage(ctk.CTkFrame):
         self.phone_label = ctk.CTkLabel(self, text="Phone number", font=ctk.CTkFont(size=14, weight="bold"), text_color="white")
         self.phone_label.grid(row=8, column=0, columnspan=2, sticky="w", padx=50, pady=(2, 0))
 
-        self.phone_entry = ctk.CTkEntry(self, placeholder_text= "Phone number", width=250, validate="key", validatecommand=self.vcmd, text_color="white")
+        self.phone_entry = ctk.CTkEntry(self, placeholder_text= "Phone number", width=250, validate="key", validatecommand=self.vcmd, text_color="black")
         self.phone_entry.grid(row=9, column=0, columnspan=2, pady=2)
         
         #Signup button
@@ -74,6 +74,7 @@ class SignupPage(ctk.CTkFrame):
         if not username or not password or not email or not phone:
             tkmb.showerror("Error", "All fields are required!")
             return
+        
         if len(phone) !=9:
             tkmb.showerror("Error", "Phone number must be 9 digits long.")
             return
@@ -81,10 +82,12 @@ class SignupPage(ctk.CTkFrame):
         user = User(username=username, password=password, email=email, phone=phone)
 
         try:
+
             if user.register_user():
                 tkmb.showinfo("Success", "Account created successfully!")
                 
         except ValueError as e: 
+
             if 'username' in str(e):
                 tkmb.showerror("Error", "Username already exists.")
             elif 'email' in str(e):
@@ -96,6 +99,7 @@ class SignupPage(ctk.CTkFrame):
             return
         
         finally:
+
             if self.app:
                 self.app.load_login_page()
         

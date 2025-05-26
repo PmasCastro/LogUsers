@@ -24,8 +24,8 @@ class UserMainPage(ctk.CTkFrame):
         self.show_dashboard()
         
 
-
     def create_widgets(self):
+
         # === NAVBAR ===
         self.navbar = ctk.CTkFrame(self, fg_color="#3e3e42", height=60, corner_radius=0)
         self.navbar.grid(row=0, column=0, sticky="ew")
@@ -43,6 +43,7 @@ class UserMainPage(ctk.CTkFrame):
 
 
     def clear_content_frame(self):
+
         for widget in self.content_frame.winfo_children():
             widget.destroy()
 
@@ -83,7 +84,9 @@ class UserMainPage(ctk.CTkFrame):
 
 
     def show_settings(self):
+
         self.clear_content_frame()
+
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="White")
         label.pack(pady=20)

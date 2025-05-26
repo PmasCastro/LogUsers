@@ -5,6 +5,7 @@ import bcrypt
 DB_NAME = "users.db"
 
 class User:
+    
     def __init__(self, username, password, email, phone, is_admin=False):
         
         self.username = username
