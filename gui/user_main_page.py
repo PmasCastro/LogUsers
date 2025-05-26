@@ -12,10 +12,11 @@ lisbon = pytz.timezone("Europe/Lisbon")
 
 class UserMainPage(ctk.CTkFrame):
 
-    def __init__(self, master=None, username=None, user_role=None):
+    def __init__(self, master=None, username=None, user_role=None, app = None):
         super().__init__(master)
         self.username = username
         self.user_role = user_role
+        self.app = app
 
         self.configure(fg_color="#1e1e1e")
         self.grid(row=0, column=0, sticky="nsew")

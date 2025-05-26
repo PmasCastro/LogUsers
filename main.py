@@ -106,9 +106,8 @@ class App(ctk.CTk):
             #This method creates an instance of the MainPage class and sets its master to the background frame.
             #It also passes the username from LoginPage to the MainPage instance.
         self.user_page = UserMainPage(master=self.background_frame, username=username, user_role=user_role)
-        self.current_page = self.user_page
-
         self.user_page.app = self
+        self.current_page = self.user_page
     
 
     def load_admin_page(self, username, user_role):
