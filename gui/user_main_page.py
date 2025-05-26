@@ -1,10 +1,14 @@
 import customtkinter as ctk
 from CTkTable import *
 from auth import Authenticator
+from datetime import datetime
+import pytz
 import sqlite3
 import os
 
 DB_NAME = "users.db"
+lisbon = pytz.timezone("Europe/Lisbon")
+
 
 class UserMainPage(ctk.CTkFrame):
 
@@ -22,10 +26,8 @@ class UserMainPage(ctk.CTkFrame):
 
         self.create_widgets()
         self.show_dashboard()
-        
 
     def create_widgets(self):
-
         # === NAVBAR ===
         self.navbar = ctk.CTkFrame(self, fg_color="#3e3e42", height=60, corner_radius=0)
         self.navbar.grid(row=0, column=0, sticky="ew")
@@ -41,27 +43,21 @@ class UserMainPage(ctk.CTkFrame):
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
 
-
     def clear_content_frame(self):
-
         for widget in self.content_frame.winfo_children():
             widget.destroy()
 
-
     def show_dashboard(self):
-        
         self.clear_content_frame()
 
         try:
             with sqlite3.connect(DB_NAME) as conn:
                 cursor = conn.cursor()
-
                 cursor.execute(
-                    "SELECT username, user_id, event, timestamp FROM login WHERE username = ?", 
+                    "SELECT username, user_id, event, timestamp FROM login WHERE username = ?",
                     (self.username,)
-                    ) 
+                )
                 rows = cursor.fetchall()
-
         except sqlite3.OperationalError:
             print("Database error occurred.")
             rows = []
@@ -71,27 +67,33 @@ class UserMainPage(ctk.CTkFrame):
         scroll_frame = ctk.CTkScrollableFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         scroll_frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
-        # Header
+        # Add headers
         for col_index, header in enumerate(headers):
-            label = ctk.CTkLabel(scroll_frame, text=header, font=("Arial", 18, "bold"), text_color="white")
-            label.grid(row=0, column=col_index, padx=10, pady=5)
+            header_label = ctk.CTkLabel(scroll_frame, text=header, font=("Arial", 14, "bold"), text_color="white")
+            header_label.grid(row=0, column=col_index, padx=10, pady=5)
 
-        # Data rows
+        # Add data rows
         for row_index, user in enumerate(rows, start=1):
             for col_index, item in enumerate(user):
+                # Convert UTC timestamp to Lisbon time (if timestamp column)
+                if col_index == 3 and isinstance(item, str):
+                    try:
+                        utc_time = datetime.strptime(item, "%Y-%m-%d %H:%M:%S")
+                        local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(lisbon)
+                        item = local_time.strftime("%Y-%m-%d %H:%M:%S")
+                    except ValueError:
+                        pass
+
                 label = ctk.CTkLabel(scroll_frame, text=str(item), font=("Arial", 14), text_color="white")
                 label.grid(row=row_index, column=col_index, padx=10, pady=5)
 
-
     def show_settings(self):
-
         self.clear_content_frame()
 
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="White")
         label.pack(pady=20)
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
-
 
     def handle_logout(self):
         if self.username:
@@ -101,8 +103,5 @@ class UserMainPage(ctk.CTkFrame):
             if os.path.exists("session.json"):
                 os.remove("session.json")
 
-            if self.app:
-                self.app.load_login_page()
-
-
-
+            if hasattr(self.master, "show_login_screen"):
+                self.master.show_login_screen()
