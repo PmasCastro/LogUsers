@@ -46,7 +46,7 @@ class UserManagement:
         finally:
             conn.close()
     
-    def change_password(self, username, new_password):
+    def change_password(self, username, old_password, new_password):
 
         #Need to refactor to check the old password before changing it
 
@@ -56,7 +56,7 @@ class UserManagement:
 
             # Check if the username exists in the database
             cursor.execute(
-                "SELECT username FROM users WHERE username=?", (username,))
+                "SELECT password FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
 
             # If the username does not exist, print a message and return
@@ -64,20 +64,24 @@ class UserManagement:
                 print(f"User '{username}' does not exist.")
                 return
             
-            ## If the username exists, check if the new_password is empty
-            else:
-                # If the new_password is empty, print a message and return
-                if " " in new_password:
-                    print("Password cannot contain spaces.")
-                    return
-                hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-                # If the username exists, update the password
-                cursor.execute(
-                    "UPDATE users SET password=? WHERE username=?", (hashed, username))
-                conn.commit()
-                print(f"Password for user '{username}' changed successfully.")
+            stored_password = result[0]
+
+            if not bcrypt.checkpw(old_password.encode('utf-8'), stored_password):
+                raise ValueError("Old password is incorrect.")
+            
+            # if len(new_password) < 8:
+
+            if " " in new_password:
+                raise ValueError("Password cannot contain spaces.")
+            
+            hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            cursor.execute(
+                "UPDATE users SET password=? WHERE username=?", (hashed, username))
+            conn.commit()
+            
         finally:
             conn.close()
+            print(f"Password for user '{username}' changed successfully.")
         
 
     def change_email(self, username, new_email):
@@ -220,11 +224,13 @@ class UserManagement:
         params.append(current_username)
         query = f"UPDATE users SET {', '.join(updates)} WHERE username=?"
 
-        with sqlite3.connect(DB_NAME) as conn:
-            cursor = conn.cursor()
-            cursor.execute(query, params)
-            conn.commit()
-            
+        try:
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute(query, params)
+                conn.commit()
+        except sqlite3.Error as e:
+            print("Update failed:", e)
 
        
         
@@ -234,4 +240,4 @@ class UserManagement:
 
 # mg = UserManagement()
 
-# mg.change_status("Pedro", 1)
+# mg.change_password("Admin", "1234", "123")

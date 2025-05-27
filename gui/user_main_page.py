@@ -130,6 +130,9 @@ class UserMainPage(ctk.CTkFrame):
         username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
         email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
         phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
+        save_button = ctk.CTkButton(frame, text="Save Changes", command=lambda: UserManagement().update_user_fields(current_username, username_entry.get(), email_entry.get(), phone_entry.get()))
+
+    
         
         username_entry.insert(0, current_username)
         email_entry.insert(0, email)
