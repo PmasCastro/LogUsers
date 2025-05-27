@@ -201,6 +201,6 @@ class UserManagement:
 
         
 
-mg = UserManagement()
+# mg = UserManagement()
 
-mg.change_status("Pedro", 1)
+# mg.change_status("Pedro", 1)

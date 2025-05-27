@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from CTkTable import *
 from auth import Authenticator
+from management import UserManagement
 from datetime import datetime
 import pytz
 import sqlite3
@@ -105,11 +106,24 @@ class UserMainPage(ctk.CTkFrame):
                 label.grid(row=row_index, column=col_index, padx=30, pady=5)
 
     def show_settings(self):
-        self.clear_content_frame()
 
+        self.clear_content_frame()
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="White")
         label.pack(pady=20)
+        
+        username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
+        email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
+        phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
+        
+        # username_entry.insert(0, current_username)
+        # email_entry.insert(0, email)
+        # phone_entry.insert(0, phone)
+        
+        username_entry.pack(pady=10)
+        email_entry.pack(pady=10)
+        phone_entry.pack(pady=10)
+        
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
 
