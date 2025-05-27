@@ -66,7 +66,6 @@ class LoginPage(ctk.CTkFrame):
         password = self.user_pass.get()
         
         try:
-            
             if not username.strip() or not password.strip():
                 raise ValueError("Please fill in all fields")
             

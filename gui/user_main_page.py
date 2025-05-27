@@ -108,17 +108,32 @@ class UserMainPage(ctk.CTkFrame):
     def show_settings(self):
 
         self.clear_content_frame()
+
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
         label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="White")
         label.pack(pady=20)
+
+        try:
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT username, email, phone FROM users WHERE username = ?", (self.username,))
+
+                user_data = cursor.fetchone()
+
+        except sqlite3.OperationalError as e:
+            print("Database error occurred.", e)
+            user_data = ("", "", "")
+        
+        current_username, email, phone = user_data if user_data else ("", "", "")
+            
         
         username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
         email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
         phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
         
-        # username_entry.insert(0, current_username)
-        # email_entry.insert(0, email)
-        # phone_entry.insert(0, phone)
+        username_entry.insert(0, current_username)
+        email_entry.insert(0, email)
+        phone_entry.insert(0, phone)
         
         username_entry.pack(pady=10)
         email_entry.pack(pady=10)

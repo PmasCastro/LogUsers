@@ -118,7 +118,6 @@ class UserManagement:
             conn.close()
 
           
-
     def change_phone(self, username, new_phone):
 
         try:
@@ -194,8 +193,40 @@ class UserManagement:
 
         finally:
             conn.close()  
+    
+    # This function updates user fields such as username, email, and phone. It's flexible
+    # the user can choose to update any combination of these fields.
+    def update_user_fields(self, current_username, new_username=None, new_email=None, new_phone=None):
+        #we pass current_username to identify the user we want to update
 
-                    
+        # updates: a list that will hold SQL snippets like "username = ?". - which column to update.
+        # params: values to go in place of those ? placeholders in the SQL query. We use this to prevent SQL injection.
+        updates = []
+        params = []
+
+        if new_username:
+            updates.append("username=?")
+            params.append(new_username)
+        if new_email:
+            updates.append("email=?")
+            params.append(new_email)
+        if new_phone:
+            updates.append("phone=?")
+            params.append(new_phone)
+        if not updates:
+            print("No fields to update.")
+            return
+        
+        params.append(current_username)
+        query = f"UPDATE users SET {', '.join(updates)} WHERE username=?"
+
+        with sqlite3.connect(DB_NAME) as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            conn.commit()
+            
+
+       
         
 
 
