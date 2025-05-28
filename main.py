@@ -143,15 +143,14 @@ class App(ctk.CTk):
     
 
     def on_close(self):
-        # print("Remember Me:", self.remember_var.get())  #For debugging purposes (returns the state of the checkbox)
-        #If the remember me checkbox is checked, it will log "Remember Me: True" in the console. Else, it will log "Remember Me: False".
-
-        #Checks if the user is logged in and if the remember me checkbox is not checked.
+        
         if self.logged_in_username and not self.remember_var.get():
+            
             auth = Authenticator()
             auth.logout_user(self.logged_in_username)
-                
+            
         self.destroy()
+        print("Closing app. Logging out:", self.logged_in_username)
 
 
     def run(self):

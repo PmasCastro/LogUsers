@@ -146,31 +146,38 @@ class UserMainPage(ctk.CTkFrame):
 
     def save_changes(self):
 
-        new_username = self.username_entry.get().strip()
-        new_email = self.email_entry.get().strip()
-        new_phone = self.phone_entry.get().strip()
+        self.new_username = self.username_entry.get().strip()
+        self.new_email = self.email_entry.get().strip()
+        self.new_phone = self.phone_entry.get().strip()
 
         user_management = UserManagement()
 
         try:
-            user_management.change_username(self.username, new_username)
-            user_management.change_email(new_username, new_email)
-            user_management.change_phone(new_username, new_phone)
+            user_management.change_username(self.username, self.new_username)
+            user_management.change_email(self.new_username, self.new_email)
+            user_management.change_phone(self.new_username, self.new_phone)
 
             tkmb.showinfo("Success", "Changes saved successfully!")
-            self.username = new_username  # Update the username in the instance
+            self.username = self.new_username  # Update the username in the instance
+
+            if self.app:
+                self.app.logged_in_username = self.new_username
+
             self.show_settings()  # Refresh the settings page
 
         except ValueError as e:
-            tkmb.showerror("Error", str(e))
-
-
+            if "already exists" in str(e):
+                tkmb.showerror("Error", "Username or email already exists.")
+            
 
     def handle_logout(self):
-        if self.username:
+
+        username_to_logoout = self.new_username if hasattr(self, 'new_username') else self.username
+        
+        if username_to_logoout:
             
             auth = Authenticator()
-            auth.logout_user(self.username)
+            auth.logout_user(username_to_logoout)
 
             if os.path.exists("session.json"):
                 os.remove("session.json")
