@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import tkinter.messagebox as tkmb
 from CTkTable import *
 from auth import Authenticator
 from management import UserManagement
@@ -126,24 +127,43 @@ class UserMainPage(ctk.CTkFrame):
         
         current_username, email, phone = user_data if user_data else ("", "", "")
             
-        
-        username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
-        email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
-        phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
-        save_button = ctk.CTkButton(frame, text="Save Changes", command=lambda: UserManagement().update_user_fields(self.username, username_entry.get(), email_entry.get(), phone_entry.get()))
+        self.username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
+        self.email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
+        self.phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
+        save_button = ctk.CTkButton(frame, text="Save Changes", command=self.save_changes)
 
-    
+        self.username_entry.insert(0, current_username)
+        self.email_entry.insert(0, email)
+        self.phone_entry.insert(0, phone)
         
-        username_entry.insert(0, current_username)
-        email_entry.insert(0, email)
-        phone_entry.insert(0, phone)
-        
-        username_entry.pack(pady=10)
-        email_entry.pack(pady=10)
-        phone_entry.pack(pady=10)
+        self.username_entry.pack(pady=10)
+        self.email_entry.pack(pady=10)
+        self.phone_entry.pack(pady=10)
         save_button.pack(pady=20)
         
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+
+
+    def save_changes(self):
+
+        new_username = self.username_entry.get().strip()
+        new_email = self.email_entry.get().strip()
+        new_phone = self.phone_entry.get().strip()
+
+        user_management = UserManagement()
+
+        try:
+            user_management.change_username(self.username, new_username)
+            user_management.change_email(new_username, new_email)
+            user_management.change_phone(new_username, new_phone)
+
+            tkmb.showinfo("Success", "Changes saved successfully!")
+            self.username = new_username  # Update the username in the instance
+            self.show_settings()  # Refresh the settings page
+
+        except ValueError as e:
+            tkmb.showerror("Error", str(e))
+
 
 
     def handle_logout(self):
