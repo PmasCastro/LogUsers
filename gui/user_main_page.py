@@ -130,7 +130,7 @@ class UserMainPage(ctk.CTkFrame):
         username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
         email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
         phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
-        save_button = ctk.CTkButton(frame, text="Save Changes", command=lambda: UserManagement().update_user_fields(current_username, username_entry.get(), email_entry.get(), phone_entry.get()))
+        save_button = ctk.CTkButton(frame, text="Save Changes", command=lambda: UserManagement().update_user_fields(self.username, username_entry.get(), email_entry.get(), phone_entry.get()))
 
     
         
@@ -141,6 +141,7 @@ class UserMainPage(ctk.CTkFrame):
         username_entry.pack(pady=10)
         email_entry.pack(pady=10)
         phone_entry.pack(pady=10)
+        save_button.pack(pady=20)
         
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
