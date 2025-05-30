@@ -83,8 +83,10 @@ class User:
 
         
 # #Example to create user
-# admin_user = User("Test", "1234", "test@gmail.com", "965448951", is_admin=False)
-# admin_user.register_user()
+# user = User("Teste", "1", "teste@admin.com", "965448800", is_admin=False)
+# admin = User("a", "a", "admin@admin.com", "965448900", is_admin=True)
+# user.register_user()
+# admin.register_user()
 
 
 

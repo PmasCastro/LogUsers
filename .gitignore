@@ -1,0 +1,5 @@
+.venv
+users.db
+.test.py
+.env
+project_structure.txt

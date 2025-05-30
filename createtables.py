@@ -1,5 +1,7 @@
 # #This function creates the tables if they don't exist, mostly I'll keep this here as reference to create 
 # #new tables in future projects
+# import sqlite3
+# DB_NAME = 'users.db'
 
 
 # def init_db():
@@ -37,7 +39,7 @@
 # init_db()
 
 
-# #This block adds a new collumn to an existing table
+#This block adds a new collumn to an existing table
 
 # def add_column():
 #     # Connect to the database
