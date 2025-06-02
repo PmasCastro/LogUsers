@@ -4,6 +4,7 @@ from CTkTable import *
 from auth import Authenticator
 from management import UserManagement
 from datetime import datetime
+import json
 import pytz
 import sqlite3
 import os
@@ -111,12 +112,11 @@ class UserMainPage(ctk.CTkFrame):
         self.clear_content_frame()
 
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
-        frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         frame.grid_columnconfigure(0, weight=1)
 
     # Add title label (correctly now!)
-        title_label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="white")
-        title_label.pack(pady=(10, 20))
+        label = ctk.CTkLabel(frame, text="User Settings", font=("Arial", 24, "bold"), text_color="white")
+        label.pack(pady=(10, 20))
 
         try:
             with sqlite3.connect(DB_NAME) as conn:
@@ -166,6 +166,9 @@ class UserMainPage(ctk.CTkFrame):
 
             if self.app:
                 self.app.logged_in_username = self.new_username
+
+            with open("session.json", "w") as f:
+                json.dump({"username": self.new_username}, f)    
 
             self.show_settings()  # Refresh the settings page
 

@@ -137,20 +137,19 @@ class App(ctk.CTk):
         if self.current_page:
             self.current_page.destroy()
         
-    
-    def load_user_settings(self):
-        pass
-    
 
+    
     def on_close(self):
-        
         if self.logged_in_username and not self.remember_var.get():
-            
             auth = Authenticator()
             auth.logout_user(self.logged_in_username)
-            
-        self.destroy()
+
+            if os.path.exists("session.json"):
+                os.remove("session.json")
+
         print("Closing app. Logging out:", self.logged_in_username)
+        self.destroy()
+
 
 
     def run(self):
