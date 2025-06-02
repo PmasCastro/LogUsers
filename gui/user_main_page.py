@@ -111,8 +111,12 @@ class UserMainPage(ctk.CTkFrame):
         self.clear_content_frame()
 
         frame = ctk.CTkFrame(self.content_frame, fg_color="#3e3e42", corner_radius=20)
-        label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="White")
-        label.pack(pady=20)
+        frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+        frame.grid_columnconfigure(0, weight=1)
+
+    # Add title label (correctly now!)
+        title_label = ctk.CTkLabel(frame, text="Settings Panel", font=("Arial", 20), text_color="white")
+        title_label.pack(pady=(10, 20))
 
         try:
             with sqlite3.connect(DB_NAME) as conn:
