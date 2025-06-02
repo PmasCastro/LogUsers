@@ -21,6 +21,9 @@ class UserMainPage(ctk.CTkFrame):
         self.user_role = user_role
         self.app = app
 
+        if self.app:
+            self.app.protocol("WM_DELETE_WINDOW", self.custom_on_close)
+
         self.configure(fg_color="#1e1e1e")
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -46,6 +49,12 @@ class UserMainPage(ctk.CTkFrame):
         self.content_frame.grid(row=1, column=0, sticky="nsew", padx=40, pady=40)
         self.content_frame.grid_rowconfigure(0, weight=1)
         self.content_frame.grid_columnconfigure(0, weight=1)
+    
+    
+    def custom_on_close(self):
+        print("UserMainPage custom close logic")
+        # Call the original app on_close or do your own
+        self.app.on_close()
 
     def clear_content_frame(self):
         for widget in self.content_frame.winfo_children():
@@ -149,37 +158,49 @@ class UserMainPage(ctk.CTkFrame):
 
 
     def save_changes(self):
-
         self.new_username = self.username_entry.get().strip()
         self.new_email = self.email_entry.get().strip()
         self.new_phone = self.phone_entry.get().strip()
 
         user_management = UserManagement()
 
+        username_changed_successfully = False
+
         try:
-            user_management.change_username(self.username, self.new_username)
+            if self.new_username != self.username:
+                user_management.change_username(self.username, self.new_username)
+                self.username = self.new_username
+
             user_management.change_email(self.new_username, self.new_email)
             user_management.change_phone(self.new_username, self.new_phone)
 
-            tkmb.showinfo("Success", "Changes saved successfully!")
-            self.username = self.new_username  # Update the username in the instance
-
             if self.app:
-                self.app.logged_in_username = self.new_username
+                self.app.logged_in_username = self.username  # update here
 
-            with open("session.json", "w") as f:
-                json.dump({"username": self.new_username}, f)    
-
-            self.show_settings()  # Refresh the settings page
+            tkmb.showinfo("Success", "Changes saved successfully!")
 
         except ValueError as e:
             if "already exists" in str(e):
                 tkmb.showerror("Error", "Username or email already exists.")
+
+    # def on_close(self):
+    #     username_to_logout = getattr(self, 'new_username', self.username)
+    #     print(f"DEBUG UserMainPage on_close: Logging out user '{username_to_logout}'")
+
+    #     auth = Authenticator()
+    #     auth.logout_user(username_to_logout)
+
+    #     if os.path.exists("session.json"):
+    #         os.remove("session.json")
+
+    #     # If you want to close the whole app:
+    #     self.master.destroy()
+
             
 
     def handle_logout(self):
 
-        username_to_logoout = self.new_username if hasattr(self, 'new_username') else self.username
+        username_to_logoout = self.username
         
         if username_to_logoout:
             
@@ -190,4 +211,6 @@ class UserMainPage(ctk.CTkFrame):
                 os.remove("session.json")
 
             if self.app:
+                self.app.logged_in_username = None
+                self.app.user_role = None
                 self.app.load_login_page()

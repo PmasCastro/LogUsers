@@ -27,6 +27,7 @@ class App(ctk.CTk):
         self.remember_var = ctk.BooleanVar(value=False)  
         self.logged_in_username = None
         self.user_role = None
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
         
         # Configure grid for the main window
         self.grid_rowconfigure(0, weight=1)
@@ -105,7 +106,12 @@ class App(ctk.CTk):
 
             #This method creates an instance of the MainPage class and sets its master to the background frame.
             #It also passes the username from LoginPage to the MainPage instance.
-        self.user_page = UserMainPage(master=self.background_frame, username=username, user_role=user_role)
+        self.user_page = UserMainPage(
+            master=self.background_frame,
+            username=username, 
+            user_role=user_role, 
+            app=self)
+        
         self.user_page.app = self
         self.current_page = self.user_page
     
@@ -140,16 +146,13 @@ class App(ctk.CTk):
 
     
     def on_close(self):
-        if self.logged_in_username and not self.remember_var.get():
-            auth = Authenticator()
+        print(f"DEBUG: Logging out user {self.logged_in_username}")
+        auth = Authenticator()
+        if self.logged_in_username:
             auth.logout_user(self.logged_in_username)
-
-            if os.path.exists("session.json"):
-                os.remove("session.json")
-
-        print("Closing app. Logging out:", self.logged_in_username)
+        if os.path.exists("session.json"):
+            os.remove("session.json")
         self.destroy()
-
 
 
     def run(self):
