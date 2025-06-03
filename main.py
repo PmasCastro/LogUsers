@@ -146,7 +146,9 @@ class App(ctk.CTk):
 
     
     def on_close(self):
+
         print(f"DEBUG: Logging out user {self.logged_in_username}")
+        
         auth = Authenticator()
         if self.logged_in_username:
             auth.logout_user(self.logged_in_username)

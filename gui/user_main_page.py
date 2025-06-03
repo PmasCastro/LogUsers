@@ -158,54 +158,59 @@ class UserMainPage(ctk.CTkFrame):
 
 
     def save_changes(self):
-        self.new_username = self.username_entry.get().strip()
-        self.new_email = self.email_entry.get().strip()
-        self.new_phone = self.phone_entry.get().strip()
+        
+        new_username = self.username_entry.get().strip()
+        new_email = self.email_entry.get().strip()
+        new_phone = self.phone_entry.get().strip()
+
+        print(f"[DEBUG] save_changes called with: old_username={self.username}, new_username={new_username}, new_email={new_email}, new_phone={new_phone}")
 
         user_management = UserManagement()
-
-        username_changed_successfully = False
+        username_changed = new_username != self.username
 
         try:
-            if self.new_username != self.username:
-                user_management.change_username(self.username, self.new_username)
-                self.username = self.new_username
+            if username_changed:
+                # Change username in DB
+                user_management.change_username(self.username, new_username)
+                print(f"[DEBUG] Username changed from '{self.username}' to '{new_username}'")
 
-            user_management.change_email(self.new_username, self.new_email)
-            user_management.change_phone(self.new_username, self.new_phone)
+                # Update current username in instance and app
+                self.username = new_username
+                if self.app:
+                    self.app.logged_in_username = new_username
 
+            # Update email and phone (use updated self.username now)
+            user_management.change_email(self.username, new_email)
+            user_management.change_phone(self.username, new_phone)
+
+            # Confirm app state update
             if self.app:
-                self.app.logged_in_username = self.username  # update here
+                self.app.logged_in_username = self.username
 
             tkmb.showinfo("Success", "Changes saved successfully!")
+
+            if username_changed:
+                tkmb.showinfo("Logout required", "Username changed successfully. You will be logged out for security reasons.")
+                print(f"[DEBUG] Logging out user: {self.username}")
+                self.handle_logout()
+                self.app.load_login_page()
 
         except ValueError as e:
             if "already exists" in str(e):
                 tkmb.showerror("Error", "Username or email already exists.")
 
-    # def on_close(self):
-    #     username_to_logout = getattr(self, 'new_username', self.username)
-    #     print(f"DEBUG UserMainPage on_close: Logging out user '{username_to_logout}'")
 
-    #     auth = Authenticator()
-    #     auth.logout_user(username_to_logout)
-
-    #     if os.path.exists("session.json"):
-    #         os.remove("session.json")
-
-    #     # If you want to close the whole app:
-    #     self.master.destroy()
 
             
-
     def handle_logout(self):
+        print(f"[DEBUG] handle_logout called for user: {self.username}")
 
-        username_to_logoout = self.username
+        username_to_logout = self.username
         
-        if username_to_logoout:
+        if username_to_logout:
             
             auth = Authenticator()
-            auth.logout_user(username_to_logoout)
+            auth.logout_user(username_to_logout)
 
             if os.path.exists("session.json"):
                 os.remove("session.json")
@@ -214,3 +219,4 @@ class UserMainPage(ctk.CTkFrame):
                 self.app.logged_in_username = None
                 self.app.user_role = None
                 self.app.load_login_page()
+                
