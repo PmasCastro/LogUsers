@@ -143,6 +143,8 @@ class UserMainPage(ctk.CTkFrame):
         self.username_entry = ctk.CTkEntry(frame, placeholder_text="New Username", width=250)
         self.email_entry = ctk.CTkEntry(frame, placeholder_text="New Email", width=250)
         self.phone_entry = ctk.CTkEntry(frame, placeholder_text="New Phone", width=250)
+        self.old_password_entry = ctk.CTkEntry(frame, placeholder_text="Old Password", show="*", width=250)
+        self.new_password_entry = ctk.CTkEntry(frame, placeholder_text="New Password", show="*", width=250)
         save_button = ctk.CTkButton(frame, text="Save Changes", command=self.save_changes)
 
         self.username_entry.insert(0, current_username)
@@ -152,6 +154,8 @@ class UserMainPage(ctk.CTkFrame):
         self.username_entry.pack(pady=10)
         self.email_entry.pack(pady=10)
         self.phone_entry.pack(pady=10)
+        self.old_password_entry.pack(pady=10)
+        self.new_password_entry.pack(pady=10)
         save_button.pack(pady=20)
         
         frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
@@ -162,6 +166,8 @@ class UserMainPage(ctk.CTkFrame):
         new_username = self.username_entry.get().strip()
         new_email = self.email_entry.get().strip()
         new_phone = self.phone_entry.get().strip()
+        old_password = self.old_password_entry.get().strip()
+        new_password = self.new_password_entry.get().strip()
 
         print(f"[DEBUG] save_changes called with: old_username={self.username}, new_username={new_username}, new_email={new_email}, new_phone={new_phone}")
 

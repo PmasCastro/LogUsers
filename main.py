@@ -158,6 +158,7 @@ class App(ctk.CTk):
 
 
     def run(self):
+        
         self.protocol("WM_DELETE_WINDOW", self.on_close)  #Set close handler
         self.mainloop()
 
