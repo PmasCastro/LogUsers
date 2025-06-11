@@ -169,7 +169,7 @@ class UserMainPage(ctk.CTkFrame):
         old_password = self.old_password_entry.get().strip()
         new_password = self.new_password_entry.get().strip()
 
-        print(f"[DEBUG] save_changes called with: old_username={self.username}, new_username={new_username}, new_email={new_email}, new_phone={new_phone}")
+        #print(f"[DEBUG] save_changes called with: old_username={self.username}, new_username={new_username}, new_email={new_email}, new_phone={new_phone}")
 
         user_management = UserManagement()
         username_changed = new_username != self.username
@@ -179,6 +179,7 @@ class UserMainPage(ctk.CTkFrame):
                 # Change username in DB
                 user_management.change_username(self.username, new_username)
                 print(f"[DEBUG] Username changed from '{self.username}' to '{new_username}'")
+                tkmb.showinfo("Success", f"Username changed to '{new_username}'")
 
                 # Update current username in instance and app
                 self.username = new_username
@@ -188,6 +189,7 @@ class UserMainPage(ctk.CTkFrame):
             # Update email and phone (use updated self.username now)
             user_management.change_email(self.username, new_email)
             user_management.change_phone(self.username, new_phone)
+            user_management.change_password(self.username, old_password, new_password)
 
             # Confirm app state update
             if self.app:
@@ -204,9 +206,7 @@ class UserMainPage(ctk.CTkFrame):
         except ValueError as e:
             if "already exists" in str(e):
                 tkmb.showerror("Error", "Username or email already exists.")
-
-
-
+                
             
     def handle_logout(self):
         print(f"[DEBUG] handle_logout called for user: {self.username}")
