@@ -209,6 +209,7 @@ class UserMainPage(ctk.CTkFrame):
                 
             
     def handle_logout(self):
+        
         print(f"[DEBUG] handle_logout called for user: {self.username}")
 
         username_to_logout = self.username

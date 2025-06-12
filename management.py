@@ -47,41 +47,45 @@ class UserManagement:
             conn.close()
     
     def change_password(self, username, old_password, new_password):
-
-        #Need to refactor to check the old password before changing it
-
+        
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
 
-            # Check if the username exists in the database
-            cursor.execute(
-                "SELECT password FROM users WHERE username=?", (username,))
+            cursor.execute("SELECT password FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
 
-            # If the username does not exist, print a message and return
             if result is None:
                 print(f"User '{username}' does not exist.")
-                return
-            
-            stored_password = result[0]
+                return False
+
+            stored_password = result[0].encode('utf-8')
 
             if not bcrypt.checkpw(old_password.encode('utf-8'), stored_password):
-                raise ValueError("Old password is incorrect.")
-            
-            # if len(new_password) < 8:
+                print("Old password is incorrect.")
+                return False
+
+            if len(new_password) < 8:
+                print("New password must be at least 8 characters long.")
+                return False
 
             if " " in new_password:
-                raise ValueError("Password cannot contain spaces.")
-            
+                print("Password cannot contain spaces.")
+                return False
+
             hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-            cursor.execute(
-                "UPDATE users SET password=? WHERE username=?", (hashed, username))
+            cursor.execute("UPDATE users SET password=? WHERE username=?", (hashed, username))
             conn.commit()
-            
+
+            print(f"Password for user '{username}' changed successfully.")
+            return True
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return False
+
         finally:
             conn.close()
-            print(f"Password for user '{username}' changed successfully.")
         
 
     def change_email(self, username, new_email):
